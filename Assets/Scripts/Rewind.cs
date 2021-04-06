@@ -29,16 +29,18 @@ namespace TimeControll {
         [SerializeField]
         private int _timeMeasure;
 
-        private Queue<TimePoint> _timePoints = new Queue<TimePoint>();
+        private LinkedList<TimePoint> _timePoints = new LinkedList<TimePoint>();
 
         private Rigidbody2D _rBody;
 
         private bool isRewinding = false;
         // Start is called before the first frame update
+        
+        
         void Awake()
         {
             _rBody = this.GetComponent<Rigidbody2D>();
-            _timePoints.Enqueue(new TimePoint(_rBody.transform.position,_rBody.velocity));
+           // _timePoints.Enqueue(new TimePoint(_rBody.transform.position,_rBody.velocity));
 
             
 
@@ -70,17 +72,25 @@ namespace TimeControll {
         }
         public void TimeRewind()
         {
-            TimePoint.SetTimePoint(_rBody, _timePoints.Dequeue());
+
+            if (_timePoints.Count != 0) { 
+            TimePoint.SetTimePoint(_rBody, _timePoints.Last.Value);
+            _timePoints.RemoveLast(); 
+                }
+
+            else {
+                isRewinding = false;
+                }
         }
 
         public void RecordTimePoints()
         {
-            Debug.Log(_timePoints.Count);
+            //Debug.Log(_timePoints.Count);
             if (_timePoints.Count >= _timeMeasure) {
-                _timePoints.Dequeue();
+                _timePoints.RemoveFirst();
 
             }
-            _timePoints.Enqueue(new TimePoint(_rBody.transform.position, _rBody.velocity));
+            _timePoints.AddLast(new TimePoint(_rBody.transform.position, _rBody.velocity));
         }
     }
 }
