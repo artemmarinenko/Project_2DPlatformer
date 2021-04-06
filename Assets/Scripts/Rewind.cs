@@ -9,16 +9,20 @@ namespace TimeControll {
 
         private Vector2 _velocity;
 
+        
+
         public TimePoint(Vector2 position, Vector2 velocity)
         {
             _position = position;
             _velocity = velocity;
+            
         }
 
         public static void SetTimePoint(Rigidbody2D playerRigidbody,TimePoint timePoint)
         {
             playerRigidbody.transform.position = timePoint._position;
             playerRigidbody.GetComponent<Rigidbody2D>().velocity = timePoint._velocity;
+            
         }
 
 
@@ -33,13 +37,18 @@ namespace TimeControll {
 
         private Rigidbody2D _rBody;
 
+       
+
+
         private bool isRewinding = false;
         // Start is called before the first frame update
         
         
         void Awake()
         {
-            _rBody = this.GetComponent<Rigidbody2D>();
+            
+            _rBody = GetComponent<Rigidbody2D>();
+           
            // _timePoints.Enqueue(new TimePoint(_rBody.transform.position,_rBody.velocity));
 
             
@@ -54,11 +63,15 @@ namespace TimeControll {
             if (Input.GetKey(KeyCode.R))
             {
                 isRewinding = true;
+
             }
             else
             {
                 isRewinding = false;
             }
+
+
+
         }
         void FixedUpdate()
         {

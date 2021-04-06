@@ -59,6 +59,9 @@ public class PlayerController : MonoBehaviour
         {
             _animator.SetFloat("Speed", 0);
         }
+
+
+        
         
     }
 }
