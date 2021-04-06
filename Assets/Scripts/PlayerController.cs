@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class PlayerController : MonoBehaviour
 {
+    
     [SerializeField]
     private float _speed = 2;
 
@@ -41,9 +43,6 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-
-        //_rBody.velocity = new Vector2(0, 5);
-
 
         if (Input.GetKey(KeyCode.D)) {
              _renderer.flipX = false;
