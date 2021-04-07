@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class PlayerController : MonoBehaviour
+public class Player : MonoBehaviour
 {
+
     
-    [SerializeField]
-    private float _speed = 2;
+    public float _speed = 0;
 
     [SerializeField]
     private float _jumpHeight = 4 ;
@@ -16,14 +15,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Rigidbody2D _rBody;
 
-    private SpriteRenderer _renderer;
+    public SpriteRenderer _renderer { get; set; }
 
-    private Animator _animator;
+    public Animator _animator { get; set; }
 
      void Awake()
     {
         _animator = GetComponent<Animator>();
-        _renderer = this.gameObject.GetComponent<SpriteRenderer>();
+        _renderer = GetComponent<SpriteRenderer>();
         _rBody = GetComponent<Rigidbody2D>();
     }
 
@@ -44,24 +43,26 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
 
-        if (Input.GetKey(KeyCode.D)) {
-             _renderer.flipX = false;
+        if (Input.GetKey(KeyCode.D))
+        {
+            _renderer.flipX = false;
             _animator.SetFloat("Speed", _speed);
             _rBody.position += Vector2.right * _speed * Time.fixedDeltaTime;
         }
-        else if (Input.GetKey(KeyCode.A)) {
+        else if (Input.GetKey(KeyCode.A))
+        {
             _animator.SetFloat("Speed", _speed);
             _renderer.flipX = true;
             _rBody.position += Vector2.left * _speed * Time.fixedDeltaTime;
         }
-        
+
         else
         {
             _animator.SetFloat("Speed", 0);
         }
 
+      
 
-        
-        
+
     }
 }
