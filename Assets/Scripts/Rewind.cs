@@ -30,7 +30,6 @@ namespace TimeControll {
         {
             playerRigidbody.transform.position = timePoint._position;
             playerRigidbody.GetComponent<Rigidbody2D>().velocity = timePoint._velocity;
-            player._speed = timePoint._speed;
             player._renderer.flipX = timePoint._flipX;
             player._animator.SetFloat("Speed", timePoint._speed);
 
@@ -119,7 +118,7 @@ namespace TimeControll {
                 _timePoints.RemoveFirst();
                 
             }
-            _timePoints.AddLast(new TimePoint(_rBody.transform.position, _rBody.velocity,_player._speed,_player._renderer.flipX));
+            _timePoints.AddLast(new TimePoint(_rBody.transform.position, _rBody.velocity,_player._animator.GetFloat("Speed"),_player._renderer.flipX));
         }
     }
 }
