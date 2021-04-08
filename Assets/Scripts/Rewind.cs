@@ -59,7 +59,7 @@ namespace TimeControll {
         {
             
             _rBody = GetComponent<Rigidbody2D>();
-            _player = this.GetComponent<Player>();
+            _player = GetComponent<Player>();
            
            // _timePoints.Enqueue(new TimePoint(_rBody.transform.position,_rBody.velocity));
 
