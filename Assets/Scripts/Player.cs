@@ -15,9 +15,9 @@ public class Player : MonoBehaviour
     [SerializeField]
     private Rigidbody2D _rBody;
 
-    public SpriteRenderer _renderer { get; set; }
+    public SpriteRenderer _renderer { get; private set; }
 
-    public Animator _animator { get; set; }
+    public Animator _animator { get; private set; }
 
      void Awake()
     {
@@ -34,7 +34,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.W))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
             _rBody.velocity = Vector2.up * _jumpHeight;
         }
