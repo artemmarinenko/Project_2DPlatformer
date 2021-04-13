@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TimeControll;
 
-public class Player : MonoBehaviour
+public class Player  : MonoBehaviour,iRewindable
 {
 
     
@@ -65,4 +66,55 @@ public class Player : MonoBehaviour
 
 
     }
+
+    public Rigidbody2D GetRigidbody()
+    {
+        return _rBody;
+    }
+
+    public bool GetFlip()
+    {
+        return _renderer.flipX;
+    }
+    public Animator GetAnimator()
+    {
+        return _animator;
+    }
+
+    public Vector2 GetVelocity()
+    {
+        return _rBody.velocity;
+    }
+
+    public Vector2 GetPosition()
+    {
+        return _rBody.position;
+    }
+
+    public float GetSpeed()
+    {
+        return GetAnimator().GetFloat("Speed");
+    }
+
+    public void SetSpeed(float speed)
+    {
+        GetAnimator().SetFloat("Speed",speed);
+    }
+
+    public void SetVelocity(Vector2 velocity)
+    {
+        _rBody.velocity = velocity;
+    }
+
+    public void SetPosition(Vector2 position)
+    {
+        _rBody.position = position;
+    }
+
+    public void SetFlip(bool flip)
+    {
+        _renderer.flipX = flip;
+    }
+
+    
 }

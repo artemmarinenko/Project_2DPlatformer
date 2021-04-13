@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ZombieMovement : MonoBehaviour
+public class Zombie : MonoBehaviour
 {
     
     private Rigidbody2D _rigidBody;
     private BoxCollider2D _boxCollider;
-    private bool IsMoving = false;
+    private bool IsMoving = true;
     private SpriteRenderer _spriteRenderer;
     
 

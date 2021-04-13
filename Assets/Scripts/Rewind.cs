@@ -4,6 +4,29 @@ using UnityEngine;
 
 
 namespace TimeControll {
+    public interface iRewindable
+    {
+        Animator GetAnimator();
+
+        bool GetFlip();
+
+        Rigidbody2D GetRigidbody();
+
+        Vector2 GetVelocity();
+
+        Vector2 GetPosition();
+
+        float GetSpeed();
+
+        void SetSpeed(float speed);
+
+        void SetVelocity(Vector2 velocity);
+
+        void SetPosition(Vector2 position);
+
+        void SetFlip(bool flip);
+
+    }
     public class TimePoint
     {
         private Vector2 _position;
@@ -26,12 +49,12 @@ namespace TimeControll {
             
         }
 
-        public static void SetTimePoint(Player player,Rigidbody2D playerRigidbody,TimePoint timePoint)
+        public static  void SetTimePoint(iRewindable player,TimePoint timePoint)
         {
-            playerRigidbody.transform.position = timePoint._position;
-            playerRigidbody.GetComponent<Rigidbody2D>().velocity = timePoint._velocity;
-            player._renderer.flipX = timePoint._flipX;
-            player._animator.SetFloat("Speed", timePoint._speed);
+            player.SetPosition(timePoint._position);
+            player.SetVelocity(timePoint._velocity);
+            player.SetFlip(timePoint._flipX);
+            player.SetSpeed(timePoint._speed);
 
 
         }
@@ -48,7 +71,7 @@ namespace TimeControll {
 
         private Rigidbody2D _rBody;
 
-        private Player _player;
+        private iRewindable _player;
 
 
         private  bool isRewinding = false;
@@ -59,7 +82,7 @@ namespace TimeControll {
         {
             
             _rBody = GetComponent<Rigidbody2D>();
-            _player = GetComponent<Player>();
+            _player = GetComponent<iRewindable>();
            
            // _timePoints.Enqueue(new TimePoint(_rBody.transform.position,_rBody.velocity));
 
@@ -102,7 +125,7 @@ namespace TimeControll {
         {
 
             if (_timePoints.Count != 0) { 
-            TimePoint.SetTimePoint(_player,_rBody, _timePoints.Last.Value);
+            TimePoint.SetTimePoint(_player, _timePoints.Last.Value);
             _timePoints.RemoveLast(); 
                 }
 
@@ -118,7 +141,11 @@ namespace TimeControll {
                 _timePoints.RemoveFirst();
                 
             }
-            _timePoints.AddLast(new TimePoint(_rBody.transform.position, _rBody.velocity,_player._animator.GetFloat("Speed"),_player._renderer.flipX));
+            _timePoints.AddLast(new TimePoint(
+                _player.GetPosition(),
+                _player.GetVelocity(),
+                _player.GetAnimator().GetFloat("Speed")
+                ,_player.GetFlip()));
         }
     }
 }
