@@ -33,19 +33,25 @@ public class ZombieMovement : MonoBehaviour
     private void FixedUpdate()
 
     {
-        Debug.DrawRay(_boxCollider.bounds.center, Vector2.right * (_boxCollider.bounds.extents.x + 0.15f), Color.red);
+        if (isColliderFaced()) { _spriteRenderer.flipX = !_spriteRenderer.flipX; }
+        
+        
 
-       // isColliderFaced();
+       
          
         
-        if (IsMoving&&_spriteRenderer.flipX) {
+        if (IsMoving && _spriteRenderer.flipX) {
 
-            _rigidBody.velocity = Vector2.left*1.2f;
-           // if (isColliderFaced()) { _spriteRenderer.flipX = true; }
+            _rigidBody.velocity = Vector2.left * 1.2f;
+            //Debug.DrawRay(_boxCollider.bounds.center, Vector2.left * (_boxCollider.bounds.extents.x + 0.15f), Color.red);
+            
         }
         else if (IsMoving && !_spriteRenderer.flipX) {
+
+
             _rigidBody.velocity = Vector2.right * 1.2f;
-          //  if (isColliderFaced()) { _spriteRenderer.flipX = false; }
+            //Debug.DrawRay(_boxCollider.bounds.center, Vector2.right * (_boxCollider.bounds.extents.x + 0.15f), Color.red);
+            
         }
         else
         {
@@ -56,26 +62,34 @@ public class ZombieMovement : MonoBehaviour
     public void ZombieStepStart()
     {
         IsMoving = true;
-        Debug.Log("Debug1");
+        //Debug.Log("Debug1");
         
     }
 
     public void ZombieStepFin()
     {
         IsMoving = false;
-        Debug.Log("Debug2");
+        //Debug.Log("Debug2");
        
     }
 
     private bool isColliderFaced()
+
     {
-        
-        RaycastHit2D raycastHit = Physics2D.Raycast(_boxCollider.bounds.center, _rigidBody.transform.forward, 5f);
-        
-        Color rayColor;
+        RaycastHit2D raycastHit = new RaycastHit2D();
+
+        if (_spriteRenderer.flipX == false)
+        {
+             raycastHit = Physics2D.Raycast(_boxCollider.bounds.center, Vector2.right, _boxCollider.bounds.extents.x + 0.15f, LayerMask.GetMask(new string[] { "Tilemap" }));
+        }
+        else
+        {
+             raycastHit = Physics2D.Raycast(_boxCollider.bounds.center, Vector2.left, _boxCollider.bounds.extents.x + 0.15f, LayerMask.GetMask(new string[]{ "Tilemap"}));
+        }
 
         //Debug.DrawRay(_boxCollider.bounds.center,transform.TransformDirection(transform.forward)*5f,Color.red);
-        
+
+        //Debug.Log (raycastHit.collider != null);
         return raycastHit.collider != null; 
     }
 
