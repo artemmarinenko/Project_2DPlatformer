@@ -33,18 +33,19 @@ public class ZombieMovement : MonoBehaviour
     private void FixedUpdate()
 
     {
+        Debug.DrawRay(_boxCollider.bounds.center, Vector2.right * (_boxCollider.bounds.extents.x + 0.15f), Color.red);
 
-
+       // isColliderFaced();
          
         
-        if (IsMoving&&!_spriteRenderer.flipX) {
+        if (IsMoving&&_spriteRenderer.flipX) {
 
-            _rigidBody.velocity = Vector2.right*1.2f;
-            if (isColliderFaced()) { _spriteRenderer.flipX = true; }
+            _rigidBody.velocity = Vector2.left*1.2f;
+           // if (isColliderFaced()) { _spriteRenderer.flipX = true; }
         }
-        else if (IsMoving && _spriteRenderer.flipX) {
-            _rigidBody.velocity = Vector2.left * 1.2f;
-            if (isColliderFaced()) { _spriteRenderer.flipX = false; }
+        else if (IsMoving && !_spriteRenderer.flipX) {
+            _rigidBody.velocity = Vector2.right * 1.2f;
+          //  if (isColliderFaced()) { _spriteRenderer.flipX = false; }
         }
         else
         {
@@ -56,34 +57,26 @@ public class ZombieMovement : MonoBehaviour
     {
         IsMoving = true;
         Debug.Log("Debug1");
-        // _rigidBody.gameObject.GetComponent<Collider2D>().enabled = false;
-       // _rigidBody.velocity = Vector2.right * 2;
-        //_rigidBody.AddForce(Vector2.right, ForceMode2D.Impulse);
+        
     }
 
     public void ZombieStepFin()
     {
         IsMoving = false;
         Debug.Log("Debug2");
-        //_rigidBody.gameObject.GetComponent<Collider2D>().enabled = true;
+       
     }
 
     private bool isColliderFaced()
     {
-        RaycastHit2D raycastHit = Physics2D.BoxCast(_boxCollider.bounds.center, _boxCollider.bounds.size, 0f, _rigidBody.transform.forward, 1f, default);
+        
+        RaycastHit2D raycastHit = Physics2D.Raycast(_boxCollider.bounds.center, _rigidBody.transform.forward, 5f);
+        
         Color rayColor;
 
-        if (raycastHit.collider != null)
-        {
-            rayColor = Color.green;
-        }
-        else
-        {
-            rayColor = Color.red;
-        }
+        //Debug.DrawRay(_boxCollider.bounds.center,transform.TransformDirection(transform.forward)*5f,Color.red);
         
-        
-        return raycastHit.collider != null; ;
+        return raycastHit.collider != null; 
     }
 
 }
