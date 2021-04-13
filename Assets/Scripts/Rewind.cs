@@ -144,8 +144,8 @@ namespace TimeControll {
             _timePoints.AddLast(new TimePoint(
                 _player.GetPosition(),
                 _player.GetVelocity(),
-                _player.GetAnimator().GetFloat("Speed")
-                ,_player.GetFlip()));
+                _player.GetSpeed(),
+                _player.GetFlip()));
         }
     }
 }

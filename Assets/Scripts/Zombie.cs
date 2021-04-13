@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TimeControll;
 
-public class Zombie : MonoBehaviour
+public class Zombie : MonoBehaviour, iRewindable
 {
-    
+    private Animator _animator;
     private Rigidbody2D _rigidBody;
     private BoxCollider2D _boxCollider;
     private bool IsMoving = true;
@@ -18,6 +19,7 @@ public class Zombie : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _boxCollider = GetComponent<BoxCollider2D>();
+        _animator = GetComponent<Animator>();
         
 
 
@@ -93,4 +95,53 @@ public class Zombie : MonoBehaviour
         return raycastHit.collider != null; 
     }
 
+    public Animator GetAnimator()
+    {
+        return _animator;
+    }
+
+    public bool GetFlip()
+    {
+        return _spriteRenderer.flipX;
+    }
+
+    public Rigidbody2D GetRigidbody()
+    {
+        return _rigidBody;
+    }
+
+    public Vector2 GetVelocity()
+    {
+        return _rigidBody.velocity;
+    }
+
+    public Vector2 GetPosition()
+    {
+        return _rigidBody.position;
+    }
+
+    public float GetSpeed()
+    {
+        return _animator.GetFloat("Speed");
+    }
+
+    public void SetSpeed(float speed)
+    {
+        _animator.SetFloat("Speed",speed);
+    }
+
+    public void SetVelocity(Vector2 velocity)
+    {
+        _rigidBody.velocity = velocity;
+    }
+
+    public void SetPosition(Vector2 position)
+    {
+        _rigidBody.position = position;
+    }
+
+    public void SetFlip(bool flip)
+    {
+        _spriteRenderer.flipX = flip;
+    }
 }
