@@ -16,9 +16,9 @@ public class Player  : MonoBehaviour,iRewindable
     [SerializeField]
     private Rigidbody2D _rBody;
 
-    public SpriteRenderer _renderer { get; private set; }
+    private SpriteRenderer _renderer;
 
-    public Animator _animator { get; private set; }
+    private Animator _animator;
 
      void Awake()
     {

@@ -37,11 +37,7 @@ public class Zombie : MonoBehaviour, iRewindable
     {
         if (isColliderFaced()) { _spriteRenderer.flipX = !_spriteRenderer.flipX; }
         
-        
-
-       
-         
-        
+  
         if (IsMoving && _spriteRenderer.flipX) {
 
             _rigidBody.velocity = Vector2.left * 1.2f;

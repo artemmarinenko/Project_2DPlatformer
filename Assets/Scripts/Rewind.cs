@@ -81,7 +81,7 @@ namespace TimeControll {
         void Awake()
         {
             
-            _rBody = GetComponent<Rigidbody2D>();
+            //_rBody = GetComponent<Rigidbody2D>();
             _player = GetComponent<iRewindable>();
            
            // _timePoints.Enqueue(new TimePoint(_rBody.transform.position,_rBody.velocity));
@@ -125,8 +125,11 @@ namespace TimeControll {
         {
 
             if (_timePoints.Count != 0) { 
+
             TimePoint.SetTimePoint(_player, _timePoints.Last.Value);
+
             _timePoints.RemoveLast(); 
+
                 }
 
             else {
