@@ -11,12 +11,17 @@ public class SettingsController : MonoBehaviour
     [SerializeField] private Button _music;
     [SerializeField] private Button _sound;
     [SerializeField] private Button _facebook;
+    [SerializeField] private Button _closeSettings;
+    [SerializeField] private Button _openSettings;
 
     [SerializeField] private Slider _slider;
+
+    [SerializeField] GameObject _settings;
     // Start is called before the first frame update
     void Awake()
     {
         AddButtonsListeners();
+
         _slider.onValueChanged.AddListener((float rate) => Debug.Log("Volume rate " + rate));
         
     }
@@ -24,6 +29,18 @@ public class SettingsController : MonoBehaviour
     
 
     private void AddButtonsListeners() {
+
+        _openSettings.onClick.AddListener(() =>
+        {
+            //GameObject.FindGameObjectsWithTag("Settings")[0].SetActive(true);
+            _settings.SetActive(true);
+        });
+
+        _closeSettings.onClick.AddListener(() =>
+        {
+            //GameObject.FindGameObjectsWithTag("Settings")[0].SetActive(false);
+            _settings.SetActive(false);
+        });
 
         _music.onClick.AddListener(() => {
             string status = isMusicOn ? "On" : "off";

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TimeControll;
 
-public class Zombie : MonoBehaviour, iRewindable
+public class Zombie : MonoBehaviour, IRewindable
 {
     private Animator _animator;
     private Rigidbody2D _rigidBody;
@@ -91,6 +91,7 @@ public class Zombie : MonoBehaviour, iRewindable
         return raycastHit.collider != null; 
     }
 
+    #region iRewindable Implementation
     public Animator GetAnimator()
     {
         return _animator;
@@ -140,4 +141,6 @@ public class Zombie : MonoBehaviour, iRewindable
     {
         _spriteRenderer.flipX = flip;
     }
+
+    #endregion
 }

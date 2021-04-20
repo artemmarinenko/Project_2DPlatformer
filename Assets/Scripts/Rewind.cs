@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 namespace TimeControll {
-    public interface iRewindable
+    public interface IRewindable
     {
         Animator GetAnimator();
 
@@ -49,7 +49,7 @@ namespace TimeControll {
             
         }
 
-        public static  void SetTimePoint(iRewindable player,TimePoint timePoint)
+        public static  void SetTimePoint(IRewindable player,TimePoint timePoint)
         {
             player.SetPosition(timePoint._position);
             player.SetVelocity(timePoint._velocity);
@@ -71,7 +71,7 @@ namespace TimeControll {
 
         private Rigidbody2D _rBody;
 
-        private iRewindable _player;
+        private IRewindable _player;
 
 
         private  bool isRewinding = false;
@@ -82,7 +82,7 @@ namespace TimeControll {
         {
             
             //_rBody = GetComponent<Rigidbody2D>();
-            _player = GetComponent<iRewindable>();
+            _player = GetComponent<IRewindable>();
            
            // _timePoints.Enqueue(new TimePoint(_rBody.transform.position,_rBody.velocity));
 

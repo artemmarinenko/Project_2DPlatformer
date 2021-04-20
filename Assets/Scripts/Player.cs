@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TimeControll;
 
-public class Player  : MonoBehaviour,iRewindable
+public class Player  : MonoBehaviour,IRewindable
 {
 
     
@@ -31,8 +31,6 @@ public class Player  : MonoBehaviour,iRewindable
     {
         
     }
-
-    // Update is called once per frame
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Space))
@@ -61,12 +59,8 @@ public class Player  : MonoBehaviour,iRewindable
         {
             _animator.SetFloat("Speed", 0);
         }
-
-      
-
-
     }
-
+    #region iRewindable implementation
     public Rigidbody2D GetRigidbody()
     {
         return _rBody;
@@ -116,5 +110,5 @@ public class Player  : MonoBehaviour,iRewindable
         _renderer.flipX = flip;
     }
 
-    
+    #endregion
 }
