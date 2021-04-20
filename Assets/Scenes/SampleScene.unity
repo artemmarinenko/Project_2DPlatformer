@@ -185,7 +185,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &144001155
 GameObject:
@@ -3249,6 +3249,49 @@ RectTransform:
   m_AnchoredPosition: {x: 120, y: -169.70001}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1067348317
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1067348319}
+  - component: {fileID: 1067348318}
+  m_Layer: 0
+  m_Name: CollideController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1067348318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067348317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 69c811be62266c34b9c5ae968f53eb71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1067348319
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1067348317}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.7961206, y: -5.56094, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1068671568
 GameObject:
   m_ObjectHideFlags: 0
@@ -3364,7 +3407,7 @@ Transform:
   m_LocalScale: {x: 0.9, y: 0.9, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1068671573
 BoxCollider2D:
@@ -3630,7 +3673,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1300809779
 GameObject:
@@ -3647,7 +3690,6 @@ GameObject:
   - component: {fileID: 1300809784}
   - component: {fileID: 1300809783}
   - component: {fileID: 1300809786}
-  - component: {fileID: 1300809787}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -3799,7 +3841,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _speed: 3.5
   _jumpHeight: 5
-  _rBody: {fileID: 0}
+  _rigidBody: {fileID: 0}
+  _PlayerColliderController: {fileID: 1067348318}
+  _boxCollider: {fileID: 0}
 --- !u!114 &1300809786
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3812,19 +3856,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4093e16b03837e45a78506d1c349d64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timeMeasure: 500
---- !u!114 &1300809787
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1300809779}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69c811be62266c34b9c5ae968f53eb71, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  _timeMeasure: 2000
 --- !u!1 &1415250672
 GameObject:
   m_ObjectHideFlags: 0

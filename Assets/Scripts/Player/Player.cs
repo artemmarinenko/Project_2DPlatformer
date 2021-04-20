@@ -9,12 +9,13 @@ public class Player  : MonoBehaviour,IRewindable
     
     public float _speed = 0;
 
-    [SerializeField]
-    private float _jumpHeight = 4 ;
+    [SerializeField]private float _jumpHeight = 4 ;
 
+    [SerializeField]private Rigidbody2D _rigidBody;
 
-    [SerializeField]
-    private Rigidbody2D _rBody;
+    [SerializeField]private PlayerCollideController _PlayerColliderController;
+
+    [SerializeField] private BoxCollider2D _boxCollider;
 
     private SpriteRenderer _renderer;
 
@@ -24,7 +25,11 @@ public class Player  : MonoBehaviour,IRewindable
     {
         _animator = GetComponent<Animator>();
         _renderer = GetComponent<SpriteRenderer>();
-        _rBody = GetComponent<Rigidbody2D>();
+        _rigidBody = GetComponent<Rigidbody2D>();
+        _boxCollider = GetComponent<BoxCollider2D>();
+
+
+
     }
 
     void Start()
@@ -33,26 +38,33 @@ public class Player  : MonoBehaviour,IRewindable
     }
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            _rBody.velocity = Vector2.up * _jumpHeight;
-        }
+        CollideTypes typeOfUnderneathCollide = _PlayerColliderController.ColliderFacedType(_boxCollider);
+        //Debug.Log(typeOfUnderneathCollide);
+        if (Input.GetKeyDown(KeyCode.Space) && typeOfUnderneathCollide != CollideTypes.InAir)
+            _rigidBody.velocity = Vector2.up * _jumpHeight;
+        
+
+        if (typeOfUnderneathCollide == CollideTypes.Enemy)
+            _rigidBody.velocity = Vector2.up * _jumpHeight*2;
     }
 
     void FixedUpdate()
     {
+        CollideTypes typeOfUnderneathCollide = _PlayerColliderController.ColliderFacedType(_boxCollider);
+        Debug.Log(typeOfUnderneathCollide);
+
 
         if (Input.GetKey(KeyCode.D))
         {
             _renderer.flipX = false;
             _animator.SetFloat("Speed", _speed);
-            _rBody.position += Vector2.right * _speed * Time.fixedDeltaTime;
+            _rigidBody.position += Vector2.right * _speed * Time.fixedDeltaTime;
         }
         else if (Input.GetKey(KeyCode.A))
         {
             _animator.SetFloat("Speed", _speed);
             _renderer.flipX = true;
-            _rBody.position += Vector2.left * _speed * Time.fixedDeltaTime;
+            _rigidBody.position += Vector2.left * _speed * Time.fixedDeltaTime;
         }
 
         else
@@ -65,7 +77,7 @@ public class Player  : MonoBehaviour,IRewindable
     #region iRewindable implementation
     public Rigidbody2D GetRigidbody()
     {
-        return _rBody;
+        return _rigidBody;
     }
 
     public bool GetFlip()
@@ -79,12 +91,12 @@ public class Player  : MonoBehaviour,IRewindable
 
     public Vector2 GetVelocity()
     {
-        return _rBody.velocity;
+        return _rigidBody.velocity;
     }
 
     public Vector2 GetPosition()
     {
-        return _rBody.position;
+        return _rigidBody.position;
     }
 
     public float GetSpeed()
@@ -99,12 +111,12 @@ public class Player  : MonoBehaviour,IRewindable
 
     public void SetVelocity(Vector2 velocity)
     {
-        _rBody.velocity = velocity;
+        _rigidBody.velocity = velocity;
     }
 
     public void SetPosition(Vector2 position)
     {
-        _rBody.position = position;
+        _rigidBody.position = position;
     }
 
     public void SetFlip(bool flip)
