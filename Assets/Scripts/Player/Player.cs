@@ -60,6 +60,8 @@ public class Player  : MonoBehaviour,IRewindable
             _animator.SetFloat("Speed", 0);
         }
     }
+
+    
     #region iRewindable implementation
     public Rigidbody2D GetRigidbody()
     {
