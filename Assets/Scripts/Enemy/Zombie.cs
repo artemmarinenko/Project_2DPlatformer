@@ -15,13 +15,16 @@ public class Zombie : MonoBehaviour, IRewindable
 
     // Start is called before the first frame update
     void Start()
-    {
+    { // First custom game event
+        GameEvent.OnPlayerKilledEvent += StopMovingZombie;
+
         _rigidBody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _boxCollider = GetComponent<BoxCollider2D>();
         _animator = GetComponent<Animator>();
         
 
+        
 
 
     }
@@ -41,14 +44,14 @@ public class Zombie : MonoBehaviour, IRewindable
         if (IsMoving && _spriteRenderer.flipX) {
 
             _rigidBody.velocity = Vector2.left * 1.2f;
-            Debug.DrawRay(_boxCollider.bounds.center, Vector2.left * (_boxCollider.bounds.extents.x + 0.15f), Color.red);
+           // Debug.DrawRay(_boxCollider.bounds.center, Vector2.left * (_boxCollider.bounds.extents.x + 0.15f), Color.red);
             
         }
         else if (IsMoving && !_spriteRenderer.flipX) {
 
 
             _rigidBody.velocity = Vector2.right * 1.2f;
-            Debug.DrawRay(_boxCollider.bounds.center, Vector2.right * (_boxCollider.bounds.extents.x + 0.15f), Color.red);
+           // Debug.DrawRay(_boxCollider.bounds.center, Vector2.right * (_boxCollider.bounds.extents.x + 0.15f), Color.red);
             
         }
         else
@@ -89,6 +92,12 @@ public class Zombie : MonoBehaviour, IRewindable
 
         //Debug.Log (raycastHit.collider != null);
         return raycastHit.collider != null; 
+    }
+
+    private void StopMovingZombie()
+    {
+        _animator.SetFloat("Speed", 0);
+        IsMoving = false;
     }
 
     #region iRewindable Implementation

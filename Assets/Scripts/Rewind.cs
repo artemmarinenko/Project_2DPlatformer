@@ -75,22 +75,15 @@ namespace TimeControll {
 
 
         private  bool isRewinding = false;
-        // Start is called before the first frame update
-        
-        
+     
         void Awake()
         {
-            
-            //_rBody = GetComponent<Rigidbody2D>();
-            _player = GetComponent<IRewindable>();
-           
-           // _timePoints.Enqueue(new TimePoint(_rBody.transform.position,_rBody.velocity));
 
-            
+            _player = GetComponent<IRewindable>();
 
         }
 
-        // Update is called once per frame
+        
 
         private void Update()
         {
@@ -103,7 +96,7 @@ namespace TimeControll {
             else
             {
                 isRewinding = false;
-                //_player._animator.SetFloat("Speed", 0);
+                
             }
 
 

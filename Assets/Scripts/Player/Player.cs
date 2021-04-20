@@ -23,7 +23,8 @@ public class Player  : MonoBehaviour,IRewindable
 
      void Awake()
     {
-        _animator = GetComponent<Animator>();
+        
+       _animator = GetComponent<Animator>();
         _renderer = GetComponent<SpriteRenderer>();
         _rigidBody = GetComponent<Rigidbody2D>();
         _boxCollider = GetComponent<BoxCollider2D>();
@@ -51,7 +52,7 @@ public class Player  : MonoBehaviour,IRewindable
     void FixedUpdate()
     {
         CollideTypes typeOfUnderneathCollide = _PlayerColliderController.ColliderFacedType(_boxCollider);
-        Debug.Log(typeOfUnderneathCollide);
+        //Debug.Log(typeOfUnderneathCollide);
 
 
         if (Input.GetKey(KeyCode.D))
@@ -72,6 +73,8 @@ public class Player  : MonoBehaviour,IRewindable
             _animator.SetFloat("Speed", 0);
         }
     }
+
+    
 
     
     #region iRewindable implementation
