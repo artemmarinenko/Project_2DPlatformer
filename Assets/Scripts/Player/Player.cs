@@ -9,6 +9,8 @@ public class Player  : MonoBehaviour,IRewindable
     
     public float _speed = 0;
 
+    
+    
     [SerializeField]private float _jumpHeight = 4 ;
 
     [SerializeField]private Rigidbody2D _rigidBody;
@@ -17,11 +19,13 @@ public class Player  : MonoBehaviour,IRewindable
 
     [SerializeField] private BoxCollider2D _boxCollider;
 
-    private bool isAlive = true;
+    private bool _isAlive = true;
 
     private SpriteRenderer _renderer;
 
     private Animator _animator;
+
+    private Rewind _rewindComponent;
 
      void Awake()
     {
@@ -31,6 +35,7 @@ public class Player  : MonoBehaviour,IRewindable
         _renderer = GetComponent<SpriteRenderer>();
         _rigidBody = GetComponent<Rigidbody2D>();
         _boxCollider = GetComponent<BoxCollider2D>();
+        _rewindComponent = GetComponent<Rewind>();
 
      
     }
@@ -41,7 +46,7 @@ public class Player  : MonoBehaviour,IRewindable
     }
     private void Update()
     {
-        if (isAlive) {
+        if (_isAlive) {
 
             CollideTypes typeOfUnderneathCollide = _CollideController.ColliderUnderPlayerType(this, LayerMask.GetMask(new string[] { "Enemy", "Tilemap" }));
             //Debug.Log(typeOfUnderneathCollide);
@@ -49,8 +54,11 @@ public class Player  : MonoBehaviour,IRewindable
                 _rigidBody.velocity = Vector2.up * _jumpHeight;
 
 
-            if (typeOfUnderneathCollide == CollideTypes.Enemy)
+            if (typeOfUnderneathCollide == CollideTypes.Enemy) {
                 _rigidBody.velocity = Vector2.up * _jumpHeight * 2;
+                GameEvent.RaiseOnZombieDamageDone();
+            }
+                
         }
 
         
@@ -60,7 +68,7 @@ public class Player  : MonoBehaviour,IRewindable
     {
         //CollideTypes typeOfUnderneathCollide = _ColliderController.ColliderUnderPlayerType(this);
         //Debug.Log(typeOfUnderneathCollide);
-        if (isAlive) {
+        if (_isAlive) {
 
             if (Input.GetKey(KeyCode.D))
             {
@@ -100,7 +108,10 @@ public class Player  : MonoBehaviour,IRewindable
 
 
     #region iRewindable implementation
-
+    public bool GetAliveStatus()
+    {
+        return _isAlive;
+    }
     public bool GetDamageStatus()
     {
         return _animator.GetBool("DamageDone");
@@ -161,6 +172,13 @@ public class Player  : MonoBehaviour,IRewindable
    public void SetDamageStatus(bool damageStatus)
     {
         _animator.SetBool("DamageDone", damageStatus);
+    }
+
+    
+
+    public void SetAliveStatus(bool isAlive)
+    {
+        _isAlive = isAlive ;
     }
 
     #endregion

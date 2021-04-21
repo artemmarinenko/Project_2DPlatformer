@@ -9,6 +9,7 @@ public class Zombie : MonoBehaviour, IRewindable
     private Rigidbody2D _rigidBody;
     private BoxCollider2D _boxCollider;
     private bool IsMoving = true;
+    private bool _isAlive = true;
     private SpriteRenderer _spriteRenderer;
     [SerializeField]private CollideController _collideController;
     
@@ -17,7 +18,7 @@ public class Zombie : MonoBehaviour, IRewindable
     // Start is called before the first frame update
     void Start()
     { // First custom game event
-        //GameEvent.OnPlayerDamageDone += StopMovingZombie;
+        GameEvent.onZombieDamageDone += ZombieDead;
 
         _rigidBody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -36,6 +37,10 @@ public class Zombie : MonoBehaviour, IRewindable
     private void FixedUpdate()
 
     {
+        if(_isAlive)
+            _rigidBody.gameObject.layer = LayerMask.NameToLayer("Enemy");
+
+
         if (_collideController.ColliderFaced(this, LayerMask.GetMask(new string[] { "Default" })) == CollideTypes.Player) {
             //StopMovingZombie();
             GameEvent.RaiseOnPlayerDamageDone();
@@ -79,10 +84,14 @@ public class Zombie : MonoBehaviour, IRewindable
        
     }
 
-    private void StopMovingZombie()
+    private void ZombieDead()
     {
         //_animator.SetFloat("Speed", -1);
-        //IsMoving = false;
+       // IsMoving = false;
+        _rigidBody.velocity = Vector2.up * 5;
+        _animator.SetBool("DamageDone", true);
+        _rigidBody.gameObject.layer = LayerMask.NameToLayer("EnemyAfterDeath");
+        _isAlive = false;
         //_rigidBody.constraints = RigidbodyConstraints2D.FreezeAll;
         
         
@@ -154,6 +163,16 @@ public class Zombie : MonoBehaviour, IRewindable
     public void SetDamageStatus(bool damageStatus)
     {
         _animator.SetBool("DamageDone", damageStatus);
+    }
+
+    public bool GetAliveStatus()
+    {
+        return _isAlive;
+    }
+
+    public void SetAliveStatus(bool isAlive)
+    {
+        _isAlive = isAlive;
     }
 
     #endregion

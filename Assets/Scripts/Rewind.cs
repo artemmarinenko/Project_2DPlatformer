@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 namespace TimeControll {
     public interface IRewindable
@@ -22,6 +22,8 @@ namespace TimeControll {
 
         float GetSpeed();
 
+        bool GetAliveStatus();
+
         void SetSpeed(float speed);
 
         void SetVelocity(Vector2 velocity);
@@ -31,6 +33,8 @@ namespace TimeControll {
         void SetFlip(bool flip);
 
         void SetDamageStatus(bool damageStatus);
+
+        void SetAliveStatus(bool isAlive);
 
     }
     public class TimePoint
@@ -44,16 +48,19 @@ namespace TimeControll {
         private bool _flipX;
 
         private bool _damageStatus;
+
+        private bool _isAlive;
         
         
 
-        public TimePoint(Vector2 position, Vector2 velocity,float speed, bool flipX, bool damageStatus)
+        public TimePoint(Vector2 position, Vector2 velocity,float speed, bool flipX, bool damageStatus,bool isAlive)
         {
             _position = position;
             _velocity = velocity;
             _speed = speed;
             _flipX = flipX;
             _damageStatus = damageStatus;
+            _isAlive = isAlive;
             
         }
 
@@ -64,6 +71,7 @@ namespace TimeControll {
             player.SetFlip(timePoint._flipX);
             player.SetSpeed(timePoint._speed);
             player.SetDamageStatus(timePoint._damageStatus);
+            player.SetAliveStatus(timePoint._isAlive);
 
 
         }
@@ -73,15 +81,17 @@ namespace TimeControll {
 
     public class Rewind : MonoBehaviour
     {
-        [SerializeField]
-        private int _timeMeasure;
+        public float _rewindMaxTime { get; set; }
+
+        [SerializeField] Slider _timeSlider;
 
         private LinkedList<TimePoint> _timePoints = new LinkedList<TimePoint>();
 
         private Rigidbody2D _rBody;
 
-        private IRewindable _player;
+        private IRewindable _irewindableObject;
 
+        
         
 
         private  bool isRewinding = false;
@@ -89,7 +99,7 @@ namespace TimeControll {
         void Awake()
         {
             
-            _player = GetComponent<IRewindable>();
+            _irewindableObject = GetComponent<IRewindable>();
 
         }
 
@@ -98,9 +108,12 @@ namespace TimeControll {
         private void Update()
         {
 
-            if (Input.GetKey(KeyCode.R))
+
+
+            if (Input.GetKey(KeyCode.R)&& _timePoints.Count != 0)
             {
                 Time.timeScale = 1f;
+                
                 isRewinding = true;
                 
 
@@ -118,11 +131,11 @@ namespace TimeControll {
         {
             if (isRewinding) {
                 TimeRewind();
-                
+                GameEvent.RaiseOnRewind();
             }
             else {
                 RecordTimePoints();
-                
+                GameEvent.RaiseOnRecord();
             }
             
         }
@@ -131,7 +144,7 @@ namespace TimeControll {
 
             if (_timePoints.Count != 0) { 
 
-            TimePoint.SetTimePoint(_player, _timePoints.Last.Value);
+            TimePoint.SetTimePoint(_irewindableObject, _timePoints.Last.Value);
 
             _timePoints.RemoveLast(); 
 
@@ -145,18 +158,38 @@ namespace TimeControll {
         public void RecordTimePoints()
         {
             
-            if (_timePoints.Count >= _timeMeasure) {
+            if (_timePoints.Count >= _rewindMaxTime) {
                 _timePoints.RemoveFirst();
                 
             }
             _timePoints.AddLast(new TimePoint(
-                _player.GetPosition(),
-                _player.GetVelocity(),
-                _player.GetSpeed(),
-                _player.GetFlip(),
-                _player.GetDamageStatus()));
+                _irewindableObject.GetPosition(),
+                _irewindableObject.GetVelocity(),
+                _irewindableObject.GetSpeed(),
+                _irewindableObject.GetFlip(),
+                _irewindableObject.GetDamageStatus(),
+                _irewindableObject.GetAliveStatus()
+                ));
+        }
+
+        
+
+    }
+    public static class RewindUi
+    {
+        public static void RewindSliderEffect(Slider slider, float timeMeasure)
+        {
+                slider.value -= (1f / timeMeasure);
+        }
+
+        public static void RecordSliderEffect(Slider slider, float timeMeasure)
+        {
+            if (slider.value < 1)
+                slider.value += (1f / timeMeasure);
+
         }
     }
+    
 }
 
 
