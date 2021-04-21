@@ -17,7 +17,7 @@ public class Player  : MonoBehaviour,IRewindable
 
     [SerializeField] private BoxCollider2D _boxCollider;
 
-    
+    private bool isAlive = true;
 
     private SpriteRenderer _renderer;
 
@@ -25,14 +25,14 @@ public class Player  : MonoBehaviour,IRewindable
 
      void Awake()
     {
+        GameEvent.OnPlayerDamageDone += PlayerEventHandler;
         
        _animator = GetComponent<Animator>();
         _renderer = GetComponent<SpriteRenderer>();
         _rigidBody = GetComponent<Rigidbody2D>();
         _boxCollider = GetComponent<BoxCollider2D>();
 
-        
-
+     
     }
 
     void Start()
@@ -41,45 +41,70 @@ public class Player  : MonoBehaviour,IRewindable
     }
     private void Update()
     {
-        CollideTypes typeOfUnderneathCollide = _CollideController.ColliderUnderPlayerType(this);
-        //Debug.Log(typeOfUnderneathCollide);
-        if (Input.GetKeyDown(KeyCode.Space) && typeOfUnderneathCollide != CollideTypes.InAir)
-            _rigidBody.velocity = Vector2.up * _jumpHeight;
-        
+        if (isAlive) {
 
-        if (typeOfUnderneathCollide == CollideTypes.Enemy)
-            _rigidBody.velocity = Vector2.up * _jumpHeight*2;
+            CollideTypes typeOfUnderneathCollide = _CollideController.ColliderUnderPlayerType(this, LayerMask.GetMask(new string[] { "Enemy", "Tilemap" }));
+            //Debug.Log(typeOfUnderneathCollide);
+            if (Input.GetKeyDown(KeyCode.Space) && typeOfUnderneathCollide != CollideTypes.InAir)
+                _rigidBody.velocity = Vector2.up * _jumpHeight;
+
+
+            if (typeOfUnderneathCollide == CollideTypes.Enemy)
+                _rigidBody.velocity = Vector2.up * _jumpHeight * 2;
+        }
+
+        
     }
 
     void FixedUpdate()
     {
         //CollideTypes typeOfUnderneathCollide = _ColliderController.ColliderUnderPlayerType(this);
         //Debug.Log(typeOfUnderneathCollide);
+        if (isAlive) {
 
+            if (Input.GetKey(KeyCode.D))
+            {
+                _renderer.flipX = false;
+                _animator.SetFloat("Speed", _speed);
+                _rigidBody.position += Vector2.right * _speed * Time.fixedDeltaTime;
+            }
+            else if (Input.GetKey(KeyCode.A))
+            {
+                _animator.SetFloat("Speed", _speed);
+                _renderer.flipX = true;
+                _rigidBody.position += Vector2.left * _speed * Time.fixedDeltaTime;
+            }
 
-        if (Input.GetKey(KeyCode.D))
-        {
-            _renderer.flipX = false;
-            _animator.SetFloat("Speed", _speed);
-            _rigidBody.position += Vector2.right * _speed * Time.fixedDeltaTime;
-        }
-        else if (Input.GetKey(KeyCode.A))
-        {
-            _animator.SetFloat("Speed", _speed);
-            _renderer.flipX = true;
-            _rigidBody.position += Vector2.left * _speed * Time.fixedDeltaTime;
+            else
+            {
+                _animator.SetFloat("Speed", 0);
+            }
         }
 
-        else
-        {
-            _animator.SetFloat("Speed", 0);
-        }
+        
+
+        
     }
 
-    
+    private void PlayerEventHandler()
+    {
+        //isAlive = false;
+        //_animator.SetFloat("Speed", 0);
+        _animator.SetBool("DamageDone", true);
+        _rigidBody.velocity = Vector2.up * _jumpHeight;
+        
+        //_rigidBody.constraints = RigidbodyConstraints2D.FreezeAll;
+        
+    }
 
-    
+
+
     #region iRewindable implementation
+
+    public bool GetDamageStatus()
+    {
+        return _animator.GetBool("DamageDone");
+    }
     public BoxCollider2D GetCollider()
     {
         return _boxCollider;
@@ -131,6 +156,11 @@ public class Player  : MonoBehaviour,IRewindable
     public void SetFlip(bool flip)
     {
         _renderer.flipX = flip;
+    }
+
+   public void SetDamageStatus(bool damageStatus)
+    {
+        _animator.SetBool("DamageDone", damageStatus);
     }
 
     #endregion

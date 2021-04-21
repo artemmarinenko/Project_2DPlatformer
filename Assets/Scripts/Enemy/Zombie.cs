@@ -10,6 +10,7 @@ public class Zombie : MonoBehaviour, IRewindable
     private BoxCollider2D _boxCollider;
     private bool IsMoving = true;
     private SpriteRenderer _spriteRenderer;
+    [SerializeField]private CollideController _collideController;
     
 
 
@@ -22,9 +23,6 @@ public class Zombie : MonoBehaviour, IRewindable
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _boxCollider = GetComponent<BoxCollider2D>();
         _animator = GetComponent<Animator>();
-        
-
-        
 
 
     }
@@ -38,7 +36,14 @@ public class Zombie : MonoBehaviour, IRewindable
     private void FixedUpdate()
 
     {
-        if (isColliderFaced()) { _spriteRenderer.flipX = !_spriteRenderer.flipX; }
+        if (_collideController.ColliderFaced(this, LayerMask.GetMask(new string[] { "Default" })) == CollideTypes.Player) {
+            //StopMovingZombie();
+            GameEvent.RaiseOnPlayerDamageDone();
+        }
+            
+
+        if (_collideController.ColliderFaced(this, LayerMask.GetMask(new string[] { "Tilemap" })) == CollideTypes.Ground) 
+            { _spriteRenderer.flipX = !_spriteRenderer.flipX; }
         
   
         if (IsMoving && _spriteRenderer.flipX) {
@@ -74,33 +79,21 @@ public class Zombie : MonoBehaviour, IRewindable
        
     }
 
-    private bool isColliderFaced()
-
-    {
-        RaycastHit2D raycastHit = new RaycastHit2D();
-
-        if (_spriteRenderer.flipX == false)
-        {
-             raycastHit = Physics2D.Raycast(_boxCollider.bounds.center, Vector2.right, _boxCollider.bounds.extents.x + 0.15f, LayerMask.GetMask(new string[] { "Tilemap" }));
-        }
-        else
-        {
-             raycastHit = Physics2D.Raycast(_boxCollider.bounds.center, Vector2.left, _boxCollider.bounds.extents.x + 0.15f, LayerMask.GetMask(new string[]{ "Tilemap"}));
-        }
-
-        //Debug.DrawRay(_boxCollider.bounds.center,transform.TransformDirection(transform.forward)*5f,Color.red);
-
-        //Debug.Log (raycastHit.collider != null);
-        return raycastHit.collider != null; 
-    }
-
     private void StopMovingZombie()
     {
-        _animator.SetFloat("Speed", 0);
-        IsMoving = false;
+        //_animator.SetFloat("Speed", -1);
+        //IsMoving = false;
+        //_rigidBody.constraints = RigidbodyConstraints2D.FreezeAll;
+        
+        
     }
 
     #region iRewindable Implementation
+
+    public bool GetDamageStatus()
+    {
+        return _animator.GetBool("DamageDone");
+    }
     public BoxCollider2D GetCollider()
     {
         return _boxCollider;
@@ -154,6 +147,13 @@ public class Zombie : MonoBehaviour, IRewindable
     public void SetFlip(bool flip)
     {
         _spriteRenderer.flipX = flip;
+    }
+
+    
+
+    public void SetDamageStatus(bool damageStatus)
+    {
+        _animator.SetBool("DamageDone", damageStatus);
     }
 
     #endregion

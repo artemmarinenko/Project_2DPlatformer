@@ -18,6 +18,8 @@ namespace TimeControll {
 
         Vector2 GetPosition();
 
+        bool GetDamageStatus();
+
         float GetSpeed();
 
         void SetSpeed(float speed);
@@ -27,6 +29,8 @@ namespace TimeControll {
         void SetPosition(Vector2 position);
 
         void SetFlip(bool flip);
+
+        void SetDamageStatus(bool damageStatus);
 
     }
     public class TimePoint
@@ -38,16 +42,18 @@ namespace TimeControll {
         private float _speed;
 
         private bool _flipX;
+
+        private bool _damageStatus;
         
         
 
-        public TimePoint(Vector2 position, Vector2 velocity,float speed, bool flipX )
+        public TimePoint(Vector2 position, Vector2 velocity,float speed, bool flipX, bool damageStatus)
         {
             _position = position;
             _velocity = velocity;
             _speed = speed;
             _flipX = flipX;
-
+            _damageStatus = damageStatus;
             
         }
 
@@ -57,6 +63,7 @@ namespace TimeControll {
             player.SetVelocity(timePoint._velocity);
             player.SetFlip(timePoint._flipX);
             player.SetSpeed(timePoint._speed);
+            player.SetDamageStatus(timePoint._damageStatus);
 
 
         }
@@ -75,12 +82,13 @@ namespace TimeControll {
 
         private IRewindable _player;
 
+        
 
         private  bool isRewinding = false;
      
         void Awake()
         {
-
+            
             _player = GetComponent<IRewindable>();
 
         }
@@ -92,7 +100,9 @@ namespace TimeControll {
 
             if (Input.GetKey(KeyCode.R))
             {
+                Time.timeScale = 1f;
                 isRewinding = true;
+                
 
             }
             else
@@ -143,7 +153,8 @@ namespace TimeControll {
                 _player.GetPosition(),
                 _player.GetVelocity(),
                 _player.GetSpeed(),
-                _player.GetFlip()));
+                _player.GetFlip(),
+                _player.GetDamageStatus()));
         }
     }
 }
