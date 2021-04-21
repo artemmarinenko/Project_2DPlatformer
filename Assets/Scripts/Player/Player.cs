@@ -13,9 +13,11 @@ public class Player  : MonoBehaviour,IRewindable
 
     [SerializeField]private Rigidbody2D _rigidBody;
 
-    [SerializeField]private PlayerCollideController _PlayerColliderController;
+    [SerializeField]private CollideController _CollideController;
 
     [SerializeField] private BoxCollider2D _boxCollider;
+
+    
 
     private SpriteRenderer _renderer;
 
@@ -29,7 +31,7 @@ public class Player  : MonoBehaviour,IRewindable
         _rigidBody = GetComponent<Rigidbody2D>();
         _boxCollider = GetComponent<BoxCollider2D>();
 
-
+        
 
     }
 
@@ -39,7 +41,7 @@ public class Player  : MonoBehaviour,IRewindable
     }
     private void Update()
     {
-        CollideTypes typeOfUnderneathCollide = _PlayerColliderController.ColliderFacedType(_boxCollider);
+        CollideTypes typeOfUnderneathCollide = _CollideController.ColliderUnderPlayerType(this);
         //Debug.Log(typeOfUnderneathCollide);
         if (Input.GetKeyDown(KeyCode.Space) && typeOfUnderneathCollide != CollideTypes.InAir)
             _rigidBody.velocity = Vector2.up * _jumpHeight;
@@ -51,7 +53,7 @@ public class Player  : MonoBehaviour,IRewindable
 
     void FixedUpdate()
     {
-        CollideTypes typeOfUnderneathCollide = _PlayerColliderController.ColliderFacedType(_boxCollider);
+        //CollideTypes typeOfUnderneathCollide = _ColliderController.ColliderUnderPlayerType(this);
         //Debug.Log(typeOfUnderneathCollide);
 
 
@@ -78,6 +80,10 @@ public class Player  : MonoBehaviour,IRewindable
 
     
     #region iRewindable implementation
+    public BoxCollider2D GetCollider()
+    {
+        return _boxCollider;
+    }
     public Rigidbody2D GetRigidbody()
     {
         return _rigidBody;

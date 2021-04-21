@@ -16,7 +16,7 @@ public class Zombie : MonoBehaviour, IRewindable
     // Start is called before the first frame update
     void Start()
     { // First custom game event
-        GameEvent.OnPlayerKilledEvent += StopMovingZombie;
+        //GameEvent.OnPlayerDamageDone += StopMovingZombie;
 
         _rigidBody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -101,6 +101,11 @@ public class Zombie : MonoBehaviour, IRewindable
     }
 
     #region iRewindable Implementation
+    public BoxCollider2D GetCollider()
+    {
+        return _boxCollider;
+    }
+
     public Animator GetAnimator()
     {
         return _animator;

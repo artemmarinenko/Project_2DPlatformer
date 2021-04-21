@@ -5,10 +5,10 @@ using UnityEngine;
 public static class GameEvent 
 {
     public delegate void  DealDamage();
-    public static event DealDamage OnPlayerKilledEvent;
+    public static event DealDamage OnPlayerDamageDone;
 
-    public static void RaiseOnPlayerKilled()
+    public static void RaiseOnPlayerDamageDone()
     {
-        OnPlayerKilledEvent?.Invoke();
+        OnPlayerDamageDone?.Invoke();
     }
 }

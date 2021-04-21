@@ -8,6 +8,8 @@ namespace TimeControll {
     {
         Animator GetAnimator();
 
+        BoxCollider2D GetCollider();
+
         bool GetFlip();
 
         Rigidbody2D GetRigidbody();
