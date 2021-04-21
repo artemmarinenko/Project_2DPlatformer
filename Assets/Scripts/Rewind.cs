@@ -179,13 +179,13 @@ namespace TimeControll {
     {
         public static void RewindSliderEffect(Slider slider, float timeMeasure)
         {
-                slider.value -= (1f / timeMeasure);
+                slider.value -= (0.5f / timeMeasure);
         }
 
         public static void RecordSliderEffect(Slider slider, float timeMeasure)
         {
             if (slider.value < 1)
-                slider.value += (1f / timeMeasure);
+                slider.value += (0.5f / timeMeasure);
 
         }
     }

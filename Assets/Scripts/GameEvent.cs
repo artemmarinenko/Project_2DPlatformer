@@ -5,7 +5,7 @@ using UnityEngine;
 public static class GameEvent 
 {
     public delegate void  DealDamage();
-    public static event DealDamage OnPlayerDamageDone;
+    public static event DealDamage onPlayerDamageDone;
     public static event DealDamage onZombieDamageDone;
 
 
@@ -14,9 +14,11 @@ public static class GameEvent
 
     public static event isRewinding onRecordEvent;
 
+    
+
     public static void RaiseOnPlayerDamageDone()
     {
-        OnPlayerDamageDone?.Invoke();
+        onPlayerDamageDone?.Invoke();
     }
 
     public static void RaiseOnRewind()

@@ -29,7 +29,7 @@ public class Player  : MonoBehaviour,IRewindable
 
      void Awake()
     {
-        GameEvent.OnPlayerDamageDone += PlayerEventHandler;
+        GameEvent.onPlayerDamageDone += PlayerEventHandler;
         
        _animator = GetComponent<Animator>();
         _renderer = GetComponent<SpriteRenderer>();

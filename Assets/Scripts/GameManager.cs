@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TimeControll;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Video;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,14 +11,16 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] Rewind _player;
     [SerializeField] Slider _timeSlider;
+    [SerializeField] VideoPlayer _videoPlayer;
     //[SerializeField] Slider _TimeSlider;
     // Start is called before the first frame update
     void Awake()
     {
         //_timeSlider.value = 0.5f;
-        GameEvent.OnPlayerDamageDone += GameManagerHandler;
-        GameEvent.onRewindEvent += onRewindHandler;
-        GameEvent.onRecordEvent += onRecordHandler;
+        GameEvent.onPlayerDamageDone += OnPlayeDamageDoneHandler;
+        GameEvent.onRewindEvent += OnRewindHandler;
+        
+        GameEvent.onRecordEvent += OnRecordHandler;
         
     }
 
@@ -33,19 +36,24 @@ public class GameManager : MonoBehaviour
         
     }
 
-    private void onRewindHandler()
+    private void OnRewindHandler()
     {
             RewindUi.RewindSliderEffect(_timeSlider, _rewindMaxTime);
+            _videoPlayer.gameObject.SetActive(true);
+        
         
     }
 
-    private void onRecordHandler()
+    private void OnRecordHandler()
     {
         RewindUi.RecordSliderEffect(_timeSlider, _rewindMaxTime);
+        _videoPlayer.gameObject.SetActive(false);
     }
 
+    
 
-    private void GameManagerHandler()
+
+    private void OnPlayeDamageDoneHandler()
     {
         StartCoroutine(WaitThanStopTheGame());
         
