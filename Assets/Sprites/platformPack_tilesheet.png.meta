@@ -257,6 +257,21 @@ TextureImporter:
   - first:
       213: 7152219933858350172
     second: platformPack_tilesheet_84
+  - first:
+      213: 530901223007252489
+    second: platformPack_tilesheet_85
+  - first:
+      213: -121726045332396654
+    second: platformPack_tilesheet_86
+  - first:
+      213: 2447184356273317695
+    second: platformPack_tilesheet_87
+  - first:
+      213: 5994018290434446105
+    second: platformPack_tilesheet_88
+  - first:
+      213: 3675386521965125479
+    second: platformPack_tilesheet_89
   externalObjects: {}
   serializedVersion: 11
   mipmaps:

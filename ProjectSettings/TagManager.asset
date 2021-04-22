@@ -7,6 +7,8 @@ TagManager:
   - Settings
   - Ground
   - Enemy
+  - Spikes
+  - Spike
   layers:
   - Default
   - TransparentFX

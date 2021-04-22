@@ -29,7 +29,7 @@ public class Player  : MonoBehaviour,IRewindable
 
      void Awake()
     {
-        GameEvent.onPlayerDamageDone += PlayerEventHandler;
+        GameEvent.onPlayerDamageDone += PlayerOnDeathHandler;
         
        _animator = GetComponent<Animator>();
         _renderer = GetComponent<SpriteRenderer>();
@@ -58,6 +58,9 @@ public class Player  : MonoBehaviour,IRewindable
                 _rigidBody.velocity = Vector2.up * _jumpHeight * 2;
                 GameEvent.RaiseOnZombieDamageDone();
             }
+
+            if (typeOfUnderneathCollide == CollideTypes.Spike)
+                GameEvent.RaiseOnPlayerDamageDone();
                 
         }
 
@@ -94,7 +97,7 @@ public class Player  : MonoBehaviour,IRewindable
         
     }
 
-    private void PlayerEventHandler()
+    private void PlayerOnDeathHandler()
     {
         //isAlive = false;
         //_animator.SetFloat("Speed", 0);

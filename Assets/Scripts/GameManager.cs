@@ -12,10 +12,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] Rewind _player;
     [SerializeField] Slider _timeSlider;
     [SerializeField] VideoPlayer _videoPlayer;
+    [SerializeField] GameObject _deathPanel;
     //[SerializeField] Slider _TimeSlider;
     // Start is called before the first frame update
     void Awake()
     {
+        _deathPanel.SetActive(false);
         //_timeSlider.value = 0.5f;
         GameEvent.onPlayerDamageDone += OnPlayeDamageDoneHandler;
         GameEvent.onRewindEvent += OnRewindHandler;
@@ -38,6 +40,7 @@ public class GameManager : MonoBehaviour
 
     private void OnRewindHandler()
     {
+            _deathPanel.SetActive(false);
             RewindUi.RewindSliderEffect(_timeSlider, _rewindMaxTime);
             _videoPlayer.gameObject.SetActive(true);
         
@@ -55,6 +58,7 @@ public class GameManager : MonoBehaviour
 
     private void OnPlayeDamageDoneHandler()
     {
+        _deathPanel.SetActive(true);
         StartCoroutine(WaitThanStopTheGame());
         
     }
@@ -69,8 +73,6 @@ public class GameManager : MonoBehaviour
 
     private void SetTimeMaxRewindTimeToAllRewindable(float rewindMaxTime)
     {
-        
-        
 
         _player._rewindMaxTime = rewindMaxTime;
 
