@@ -84,14 +84,17 @@ public class Zombie : MonoBehaviour, IRewindable
        
     }
 
-    private void ZombieDead()
+    private void ZombieDead(Collider2D zombie)
     {
+        IRewindable irewindableZombie = zombie.GetComponent<IRewindable>();
         //_animator.SetFloat("Speed", -1);
-       // IsMoving = false;
-        _rigidBody.velocity = Vector2.up * 5;
-        _animator.SetBool("DamageDone", true);
-        _rigidBody.gameObject.layer = LayerMask.NameToLayer("EnemyAfterDeath");
-        _isAlive = false;
+        // IsMoving = false;
+        irewindableZombie.SetVelocity(Vector2.up * 5);
+        irewindableZombie.SetDamageStatus(true);
+        irewindableZombie.GetRigidbody().gameObject.layer = LayerMask.NameToLayer("EnemyAfterDeath");
+        irewindableZombie.SetAliveStatus(false);
+        
+        
         //_rigidBody.constraints = RigidbodyConstraints2D.FreezeAll;
         
         

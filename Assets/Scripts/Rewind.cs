@@ -83,7 +83,7 @@ namespace TimeControll {
     {
         public float _rewindMaxTime { get; set; }
 
-        [SerializeField] Slider _timeSlider;
+        
 
         private LinkedList<TimePoint> _timePoints = new LinkedList<TimePoint>();
 

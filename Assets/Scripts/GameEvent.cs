@@ -1,12 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using TimeControll;
 using UnityEngine;
 
 public static class GameEvent 
 {
     public delegate void  DealDamage();
     public static event DealDamage onPlayerDamageDone;
-    public static event DealDamage onZombieDamageDone;
+
+    public delegate void DealDamageZombie(Collider2D zombie);
+    public static event DealDamageZombie onZombieDamageDone;
 
 
     public delegate void isRewinding();
@@ -31,9 +35,9 @@ public static class GameEvent
         onRecordEvent?.Invoke();
     }
 
-    public static void RaiseOnZombieDamageDone()
+    public static void RaiseOnZombieDamageDone(Collider2D zombie)
     {
-        onZombieDamageDone?.Invoke();
+        onZombieDamageDone?.Invoke(zombie);
     }
 
 }

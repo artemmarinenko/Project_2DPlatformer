@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TimeControll;
+using System;
 
 public class Player  : MonoBehaviour,IRewindable
 {
@@ -13,11 +14,13 @@ public class Player  : MonoBehaviour,IRewindable
     
     [SerializeField]private float _jumpHeight = 4 ;
 
-    [SerializeField]private Rigidbody2D _rigidBody;
+   
 
     [SerializeField]private CollideController _CollideController;
 
-    [SerializeField] private BoxCollider2D _boxCollider;
+    private Rigidbody2D _rigidBody;
+
+    private BoxCollider2D _boxCollider;
 
     private bool _isAlive = true;
 
@@ -48,18 +51,18 @@ public class Player  : MonoBehaviour,IRewindable
     {
         if (_isAlive) {
 
-            CollideTypes typeOfUnderneathCollide = _CollideController.ColliderUnderPlayerType(this, LayerMask.GetMask(new string[] { "Enemy", "Tilemap" }));
+            Tuple<CollideTypes,Collider2D> typeOfUnderneathCollide = _CollideController.ColliderUnderPlayerType(this, LayerMask.GetMask(new string[] { "Enemy", "Tilemap" }));
             //Debug.Log(typeOfUnderneathCollide);
-            if (Input.GetKeyDown(KeyCode.Space) && typeOfUnderneathCollide != CollideTypes.InAir)
+            if (Input.GetKeyDown(KeyCode.Space) && typeOfUnderneathCollide.Item1 != CollideTypes.InAir)
                 _rigidBody.velocity = Vector2.up * _jumpHeight;
 
 
-            if (typeOfUnderneathCollide == CollideTypes.Enemy) {
+            if (typeOfUnderneathCollide.Item1 == CollideTypes.Enemy) {
                 _rigidBody.velocity = Vector2.up * _jumpHeight * 2;
-                GameEvent.RaiseOnZombieDamageDone();
+                GameEvent.RaiseOnZombieDamageDone(typeOfUnderneathCollide.Item2);
             }
 
-            if (typeOfUnderneathCollide == CollideTypes.Spike)
+            if (typeOfUnderneathCollide.Item1 == CollideTypes.Spike)
                 GameEvent.RaiseOnPlayerDamageDone();
                 
         }

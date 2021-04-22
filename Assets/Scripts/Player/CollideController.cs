@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TimeControll;
-
+using System;
 
 public enum CollideTypes
 {
@@ -15,7 +15,7 @@ public enum CollideTypes
 public class CollideController : MonoBehaviour
 {
      
-    public CollideTypes ColliderUnderPlayerType(IRewindable irewindableObject,LayerMask layerMask)
+    public Tuple<CollideTypes, Collider2D> ColliderUnderPlayerType(IRewindable irewindableObject,LayerMask layerMask)
     {
         BoxCollider2D boxCollider = irewindableObject.GetCollider();
 
@@ -29,21 +29,21 @@ public class CollideController : MonoBehaviour
        //RaycastHit2D raycastHit = Physics2D.Raycast(_boxCollider.bounds.center, Vector2.down, _boxCollider.bounds.extents.y + 0.15f, LayerMask.GetMask(new string[] { "Enemy","Tilemap" }));
 
         if (boxHit.collider == null)
-            return CollideTypes.InAir;
-
+            return Tuple.Create(CollideTypes.InAir, boxHit.collider);
+        
         switch (boxHit.collider.tag)
         {
             case "Enemy":
-                return CollideTypes.Enemy;
+                return Tuple.Create(CollideTypes.Enemy, boxHit.collider);
                 
             case "Spike":
-                return CollideTypes.Spike;
+                return Tuple.Create(CollideTypes.Spike, boxHit.collider);
 
             case "Ground":
-                return CollideTypes.Ground;
+                return Tuple.Create(CollideTypes.Ground, boxHit.collider);
 
             default:
-                return CollideTypes.InAir;
+                return Tuple.Create(CollideTypes.InAir, boxHit.collider);
         }
         
     }
