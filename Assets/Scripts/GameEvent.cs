@@ -6,6 +6,13 @@ using UnityEngine;
 
 public static class GameEvent 
 {
+    public delegate void KeyInHands(DoorsKeySystem.Colors color);
+    public static event KeyInHands onGetKey;
+
+    public delegate void PlayerFlips(bool flip);
+    public static event PlayerFlips onPlayerFlip;
+
+
     public delegate void  DealDamage();
     public static event DealDamage onPlayerDamageDone;
 
@@ -18,7 +25,10 @@ public static class GameEvent
 
     public static event isRewinding onRecordEvent;
 
-    
+    public static void RaiseOnKeyGet(DoorsKeySystem.Colors color)
+    {
+        onGetKey?.Invoke(color);
+    }
 
     public static void RaiseOnPlayerDamageDone()
     {
@@ -38,6 +48,11 @@ public static class GameEvent
     public static void RaiseOnZombieDamageDone(Collider2D zombie)
     {
         onZombieDamageDone?.Invoke(zombie);
+    }
+
+    public static void RaiseOnPlayerFlips(bool flip)
+    {
+        onPlayerFlip?.Invoke(flip);
     }
 
 }

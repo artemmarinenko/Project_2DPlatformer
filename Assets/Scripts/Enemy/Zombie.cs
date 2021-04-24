@@ -10,6 +10,7 @@ public class Zombie : MonoBehaviour, IRewindable
     private BoxCollider2D _boxCollider;
     private bool IsMoving = true;
     private bool _isAlive = true;
+    private bool _keyStatus = false;
     private SpriteRenderer _spriteRenderer;
     [SerializeField]private CollideController _collideController;
     
@@ -176,6 +177,18 @@ public class Zombie : MonoBehaviour, IRewindable
     public void SetAliveStatus(bool isAlive)
     {
         _isAlive = isAlive;
+    }
+
+
+    //no need of this(
+    public bool GetKeyStatus()
+    {
+        return _keyStatus;
+    }
+
+    public void SetKeyStatus(bool keySatus)
+    {
+        _keyStatus = keySatus;
     }
 
     #endregion

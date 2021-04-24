@@ -24,6 +24,8 @@ namespace TimeControll {
 
         bool GetAliveStatus();
 
+        bool GetKeyStatus();
+
         void SetSpeed(float speed);
 
         void SetVelocity(Vector2 velocity);
@@ -35,6 +37,8 @@ namespace TimeControll {
         void SetDamageStatus(bool damageStatus);
 
         void SetAliveStatus(bool isAlive);
+
+        void SetKeyStatus(bool keySatus);
 
     }
     public class TimePoint
@@ -50,10 +54,13 @@ namespace TimeControll {
         private bool _damageStatus;
 
         private bool _isAlive;
-        
-        
 
-        public TimePoint(Vector2 position, Vector2 velocity,float speed, bool flipX, bool damageStatus,bool isAlive)
+        private bool _keyStatus;
+
+
+
+
+        public TimePoint(Vector2 position, Vector2 velocity,float speed, bool flipX, bool damageStatus,bool isAlive,bool keyStatus)
         {
             _position = position;
             _velocity = velocity;
@@ -61,6 +68,7 @@ namespace TimeControll {
             _flipX = flipX;
             _damageStatus = damageStatus;
             _isAlive = isAlive;
+            _keyStatus = keyStatus;
             
         }
 
@@ -73,6 +81,13 @@ namespace TimeControll {
             player.SetDamageStatus(timePoint._damageStatus);
             player.SetAliveStatus(timePoint._isAlive);
 
+            if (timePoint._keyStatus)
+            {
+                GameEvent.RaiseOnPlayerFlips(player.GetFlip());
+            }
+
+            
+
 
         }
 
@@ -83,11 +98,7 @@ namespace TimeControll {
     {
         public float _rewindMaxTime { get; set; }
 
-        
-
         private LinkedList<TimePoint> _timePoints = new LinkedList<TimePoint>();
-
-        private Rigidbody2D _rBody;
 
         private IRewindable _irewindableObject;
 
@@ -168,7 +179,8 @@ namespace TimeControll {
                 _irewindableObject.GetSpeed(),
                 _irewindableObject.GetFlip(),
                 _irewindableObject.GetDamageStatus(),
-                _irewindableObject.GetAliveStatus()
+                _irewindableObject.GetAliveStatus(),
+                _irewindableObject.GetKeyStatus()
                 ));
         }
 
@@ -179,13 +191,14 @@ namespace TimeControll {
     {
         public static void RewindSliderEffect(Slider slider, float timeMeasure)
         {
-                slider.value -= (0.5f / timeMeasure);
+            if (slider.value > 0)
+                slider.value -= (0.3f / timeMeasure);
         }
 
         public static void RecordSliderEffect(Slider slider, float timeMeasure)
         {
             if (slider.value < 1)
-                slider.value += (0.5f / timeMeasure);
+                slider.value += (0.3f / timeMeasure);
 
         }
     }

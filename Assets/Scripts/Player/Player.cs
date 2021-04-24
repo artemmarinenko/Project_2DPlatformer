@@ -17,6 +17,7 @@ public class Player  : MonoBehaviour,IRewindable
    
 
     [SerializeField]private CollideController _CollideController;
+    [SerializeField] private KeyOnPlayer _key;
 
     private Rigidbody2D _rigidBody;
 
@@ -28,19 +29,26 @@ public class Player  : MonoBehaviour,IRewindable
 
     private Animator _animator;
 
-    private Rewind _rewindComponent;
+    
+
+    private bool _isKeyInHands = false;
 
      void Awake()
     {
         GameEvent.onPlayerDamageDone += PlayerOnDeathHandler;
-        
-       _animator = GetComponent<Animator>();
+       
+
+
+        _animator = GetComponent<Animator>();
         _renderer = GetComponent<SpriteRenderer>();
         _rigidBody = GetComponent<Rigidbody2D>();
         _boxCollider = GetComponent<BoxCollider2D>();
-        _rewindComponent = GetComponent<Rewind>();
+        _key = GetComponent<KeyOnPlayer>();
 
-     
+
+
+
+
     }
 
     void Start()
@@ -52,13 +60,15 @@ public class Player  : MonoBehaviour,IRewindable
         if (_isAlive) {
 
             Tuple<CollideTypes,Collider2D> typeOfUnderneathCollide = _CollideController.ColliderUnderPlayerType(this, LayerMask.GetMask(new string[] { "Enemy", "Tilemap" }));
-            //Debug.Log(typeOfUnderneathCollide);
+            
+
             if (Input.GetKeyDown(KeyCode.Space) && typeOfUnderneathCollide.Item1 != CollideTypes.InAir)
                 _rigidBody.velocity = Vector2.up * _jumpHeight;
 
 
             if (typeOfUnderneathCollide.Item1 == CollideTypes.Enemy) {
                 _rigidBody.velocity = Vector2.up * _jumpHeight * 2;
+
                 GameEvent.RaiseOnZombieDamageDone(typeOfUnderneathCollide.Item2);
             }
 
@@ -72,21 +82,28 @@ public class Player  : MonoBehaviour,IRewindable
 
     void FixedUpdate()
     {
-        //CollideTypes typeOfUnderneathCollide = _ColliderController.ColliderUnderPlayerType(this);
-        //Debug.Log(typeOfUnderneathCollide);
+        
         if (_isAlive) {
 
             if (Input.GetKey(KeyCode.D))
             {
                 _renderer.flipX = false;
+                
                 _animator.SetFloat("Speed", _speed);
                 _rigidBody.position += Vector2.right * _speed * Time.fixedDeltaTime;
+
+                if(_isKeyInHands)
+                    GameEvent.RaiseOnPlayerFlips(_renderer.flipX);
             }
             else if (Input.GetKey(KeyCode.A))
             {
                 _animator.SetFloat("Speed", _speed);
                 _renderer.flipX = true;
+                
                 _rigidBody.position += Vector2.left * _speed * Time.fixedDeltaTime;
+                
+                if (_isKeyInHands)
+                   GameEvent.RaiseOnPlayerFlips(_renderer.flipX);
             }
 
             else
@@ -100,6 +117,12 @@ public class Player  : MonoBehaviour,IRewindable
         
     }
 
+    public void SetKeyInHandsStatus(bool isInHands)
+    {
+        _isKeyInHands = isInHands;
+    }
+    
+
     private void PlayerOnDeathHandler()
     {
         //isAlive = false;
@@ -111,9 +134,15 @@ public class Player  : MonoBehaviour,IRewindable
         
     }
 
+    
+
 
 
     #region iRewindable implementation
+    public bool GetKeyStatus()
+    {
+        return _isKeyInHands;
+    }
     public bool GetAliveStatus()
     {
         return _isAlive;
@@ -185,6 +214,13 @@ public class Player  : MonoBehaviour,IRewindable
     public void SetAliveStatus(bool isAlive)
     {
         _isAlive = isAlive ;
+    }
+
+    
+
+    public void SetKeyStatus(bool keySatus)
+    {
+        _isKeyInHands = keySatus;
     }
 
     #endregion
