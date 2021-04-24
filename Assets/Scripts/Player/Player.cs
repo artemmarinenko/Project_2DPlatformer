@@ -36,6 +36,7 @@ public class Player  : MonoBehaviour,IRewindable
      void Awake()
     {
         GameEvent.onPlayerDamageDone += PlayerOnDeathHandler;
+        
        
 
 
@@ -43,7 +44,7 @@ public class Player  : MonoBehaviour,IRewindable
         _renderer = GetComponent<SpriteRenderer>();
         _rigidBody = GetComponent<Rigidbody2D>();
         _boxCollider = GetComponent<BoxCollider2D>();
-        _key = GetComponent<KeyOnPlayer>();
+       // _key = GetComponent<KeyOnPlayer>();
 
 
 
@@ -121,6 +122,8 @@ public class Player  : MonoBehaviour,IRewindable
     {
         _isKeyInHands = isInHands;
     }
+
+    
     
 
     private void PlayerOnDeathHandler()
@@ -132,6 +135,11 @@ public class Player  : MonoBehaviour,IRewindable
         
         //_rigidBody.constraints = RigidbodyConstraints2D.FreezeAll;
         
+    }
+
+  public KeyOnPlayer GetKeyOnPlayer()
+    {
+        return _key;
     }
 
     

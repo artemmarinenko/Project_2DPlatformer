@@ -6,8 +6,9 @@ using UnityEngine;
 
 public static class GameEvent 
 {
-    public delegate void KeyInHands(DoorsKeySystem.Colors color);
-    public static event KeyInHands onGetKey;
+    public delegate void DoorsAndKeys(DoorsKeySystem.Colors color);
+    public static event DoorsAndKeys onGetKey;
+    public static event DoorsAndKeys onDoorOpened;
 
     public delegate void PlayerFlips(bool flip);
     public static event PlayerFlips onPlayerFlip;
@@ -25,6 +26,10 @@ public static class GameEvent
 
     public static event isRewinding onRecordEvent;
 
+    public static void RaiseOnDoorOpened(DoorsKeySystem.Colors color)
+    {
+        onDoorOpened?.Invoke(color);
+    }
     public static void RaiseOnKeyGet(DoorsKeySystem.Colors color)
     {
         onGetKey?.Invoke(color);

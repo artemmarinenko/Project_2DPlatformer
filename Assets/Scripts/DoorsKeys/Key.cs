@@ -15,6 +15,11 @@ public class Key : MonoBehaviour
     protected Collider2D _collider2DThatOverlaps;
     protected Vector2 _position;
 
+    public DoorsKeySystem.Colors GetKeyColor()
+    {
+        return _keyColor;
+    }
+
     void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -27,6 +32,7 @@ public class Key : MonoBehaviour
 
     public void SetKeyColor(DoorsKeySystem.Colors color,SpriteRenderer renderer)
     {
+        _keyColor = color;
         switch (color)
         {
             case DoorsKeySystem.Colors.Yellow:
@@ -48,18 +54,9 @@ public class Key : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-        
-
-    }
     
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Trigger");
-        
         GameEvent.RaiseOnKeyGet(_keyColor);
         Destroy(this.gameObject);
     }

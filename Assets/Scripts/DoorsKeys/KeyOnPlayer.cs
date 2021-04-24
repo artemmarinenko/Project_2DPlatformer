@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class KeyOnPlayer : Key
 {
-    
-    
-
 
     void Awake()
     {
@@ -14,16 +11,13 @@ public class KeyOnPlayer : Key
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _spriteRenderer.sprite = null;
         _position = GetComponent<Transform>().localPosition;
+
+
         GameEvent.onPlayerFlip += FlipHandler;
         GameEvent.onGetKey += KeyGetHandler;
+        GameEvent.onDoorOpened += DoorOpenedHandler;
 
 
-    }
-
-    private void Update()
-    {
-        
-        
     }
 
     private void KeyGetHandler(DoorsKeySystem.Colors color)
@@ -31,6 +25,12 @@ public class KeyOnPlayer : Key
         SetKeyColor(color, _spriteRenderer);
         GetComponentInParent<Player>().SetKeyStatus(true);
 
+    }
+
+    private void DoorOpenedHandler(DoorsKeySystem.Colors color)
+    {
+        if(color == _keyColor)
+            _spriteRenderer.sprite = null;
     }
 
 
@@ -44,5 +44,7 @@ public class KeyOnPlayer : Key
         else
             transform.localPosition = _position;
     }
+    
+
 
 }
