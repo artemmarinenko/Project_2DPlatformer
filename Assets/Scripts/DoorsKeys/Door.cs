@@ -37,7 +37,7 @@ namespace DoorsKeySystem {
 
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
+        private void OnCollisionEnter2D(Collision2D collision)
         {
             if(collision.gameObject.tag == "Player")
             {
@@ -46,6 +46,7 @@ namespace DoorsKeySystem {
                 if (player.GetKeyStatus() && (player.GetKeyOnPlayer().GetKeyColor() ==_doorColor))
                 {
                     _animator.SetBool("isOpen", true);
+                    GetComponent<Collider2D>().enabled = false;
                     GameEvent.RaiseOnDoorOpened(_doorColor);
                 }
             }
