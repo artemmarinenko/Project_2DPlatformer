@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TimeControll;
+using System;
 
-public class Zombie : MonoBehaviour, IRewindable
+public class Zombie : MonoBehaviour, IRewindable, IResettable
 {
     private Animator _animator;
     private Rigidbody2D _rigidBody;
@@ -12,13 +13,16 @@ public class Zombie : MonoBehaviour, IRewindable
     private bool _isAlive = true;
     private bool _keyStatus = false;
     private SpriteRenderer _spriteRenderer;
-    [SerializeField]private CollideController _collideController;
-    
+    private Vector2 _startingPoint;
+    private bool _startingFlip;
+    [SerializeField] private CollideController _collideController;
 
 
-    // Start is called before the first frame update
+
+  
     void Start()
-    { // First custom game event
+    { 
+       
         GameEvent.onZombieDamageDone += ZombieDead;
 
         _rigidBody = GetComponent<Rigidbody2D>();
@@ -26,10 +30,11 @@ public class Zombie : MonoBehaviour, IRewindable
         _boxCollider = GetComponent<BoxCollider2D>();
         _animator = GetComponent<Animator>();
 
+        SetStartPoint(GetPosition(), GetFlip());
 
     }
 
-    // Update is called once per frame
+   
     void Update()
     {
 
@@ -38,32 +43,34 @@ public class Zombie : MonoBehaviour, IRewindable
     private void FixedUpdate()
 
     {
-        if(_isAlive)
+        if (_isAlive)
             _rigidBody.gameObject.layer = LayerMask.NameToLayer("Enemy");
 
 
-        if (_collideController.ColliderFaced(this, LayerMask.GetMask(new string[] { "Default" })) == CollideTypes.Player) {
-            //StopMovingZombie();
+        if (_collideController.ColliderFaced(this, LayerMask.GetMask(new string[] { "Default" })) == CollideTypes.Player)
+        {
             GameEvent.RaiseOnPlayerDamageDone();
         }
-            
 
-        if (_collideController.ColliderFaced(this, LayerMask.GetMask(new string[] { "Tilemap" })) == CollideTypes.Ground) 
-            { _spriteRenderer.flipX = !_spriteRenderer.flipX; }
-        
-  
-        if (IsMoving && _spriteRenderer.flipX) {
+
+        if (_collideController.ColliderFaced(this, LayerMask.GetMask(new string[] { "Tilemap" })) == CollideTypes.Ground)
+        { _spriteRenderer.flipX = !_spriteRenderer.flipX; }
+
+
+        if (IsMoving && _spriteRenderer.flipX)
+        {
 
             _rigidBody.velocity = Vector2.left * 1.2f;
-           // Debug.DrawRay(_boxCollider.bounds.center, Vector2.left * (_boxCollider.bounds.extents.x + 0.15f), Color.red);
-            
+            // Debug.DrawRay(_boxCollider.bounds.center, Vector2.left * (_boxCollider.bounds.extents.x + 0.15f), Color.red);
+
         }
-        else if (IsMoving && !_spriteRenderer.flipX) {
+        else if (IsMoving && !_spriteRenderer.flipX)
+        {
 
 
             _rigidBody.velocity = Vector2.right * 1.2f;
-           // Debug.DrawRay(_boxCollider.bounds.center, Vector2.right * (_boxCollider.bounds.extents.x + 0.15f), Color.red);
-            
+            // Debug.DrawRay(_boxCollider.bounds.center, Vector2.right * (_boxCollider.bounds.extents.x + 0.15f), Color.red);
+
         }
         else
         {
@@ -74,31 +81,30 @@ public class Zombie : MonoBehaviour, IRewindable
     public void ZombieStepStart()
     {
         IsMoving = true;
-        //Debug.Log("Debug1");
         
+
     }
 
     public void ZombieStepFin()
     {
         IsMoving = false;
-        //Debug.Log("Debug2");
-       
+        
+
     }
 
     private void ZombieDead(Collider2D zombie)
     {
         IRewindable irewindableZombie = zombie.GetComponent<IRewindable>();
-        //_animator.SetFloat("Speed", -1);
-        // IsMoving = false;
+       
         irewindableZombie.SetVelocity(Vector2.up * 5);
         irewindableZombie.SetDamageStatus(true);
         irewindableZombie.GetRigidbody().gameObject.layer = LayerMask.NameToLayer("EnemyAfterDeath");
         irewindableZombie.SetAliveStatus(false);
+
+
         
-        
-        //_rigidBody.constraints = RigidbodyConstraints2D.FreezeAll;
-        
-        
+
+
     }
 
     #region iRewindable Implementation
@@ -134,7 +140,7 @@ public class Zombie : MonoBehaviour, IRewindable
 
     public Vector2 GetPosition()
     {
-        return _rigidBody.position;
+        return transform.position;
     }
 
     public float GetSpeed()
@@ -144,7 +150,7 @@ public class Zombie : MonoBehaviour, IRewindable
 
     public void SetSpeed(float speed)
     {
-        _animator.SetFloat("Speed",speed);
+        _animator.SetFloat("Speed", speed);
     }
 
     public void SetVelocity(Vector2 velocity)
@@ -162,7 +168,7 @@ public class Zombie : MonoBehaviour, IRewindable
         _spriteRenderer.flipX = flip;
     }
 
-    
+
 
     public void SetDamageStatus(bool damageStatus)
     {
@@ -180,7 +186,7 @@ public class Zombie : MonoBehaviour, IRewindable
     }
 
 
-    //no need of this(
+    
     public bool GetKeyStatus()
     {
         return _keyStatus;
@@ -191,5 +197,29 @@ public class Zombie : MonoBehaviour, IRewindable
         _keyStatus = keySatus;
     }
 
+
+
+    #endregion
+
+    #region IResettable implementation
+    public void Reset()
+    {
+        SetPosition(GetStartPoint().Item1);
+        SetFlip(GetStartPoint().Item2);
+        SetDamageStatus(false);
+        SetAliveStatus(true);
+        
+    }
+
+    public void SetStartPoint(Vector2 postion,bool flip)
+    {
+        _startingPoint = postion;
+        _startingFlip = flip;
+    }
+
+    public Tuple<Vector2,bool> GetStartPoint()
+    {
+        return Tuple.Create(_startingPoint, _startingFlip);
+    }
     #endregion
 }

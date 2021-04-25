@@ -2,8 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KeyOnPlayer : Key
+public class KeyOnPlayer : MonoBehaviour
 {
+    [SerializeField] protected DoorsKeySystem.Colors _keyColor;
+    [SerializeField] protected Sprite _yellowKey;
+    [SerializeField] protected Sprite _greenKey;
+    [SerializeField] protected Sprite _blueKey;
+    [SerializeField] protected Sprite _redKey;
+    [SerializeField] private BoxCollider2D _boxCollider;
+
+    private Vector2 _startingPoint;
+    private DoorsKeySystem.Colors _startingColor;
+
+
+
+    public SpriteRenderer _spriteRenderer { get; set; }
+    protected Collider2D _collider2DThatOverlaps;
+    protected Vector2 _position;
+
+    public DoorsKeySystem.Colors GetKeyColor()
+    {
+        return _keyColor;
+    }
 
     void Awake()
     {
@@ -18,6 +38,30 @@ public class KeyOnPlayer : Key
         GameEvent.onDoorOpened += DoorOpenedHandler;
 
 
+    }
+
+    public void SetKeyColor(DoorsKeySystem.Colors color, SpriteRenderer renderer)
+    {
+        _keyColor = color;
+        switch (color)
+        {
+            case DoorsKeySystem.Colors.Yellow:
+                renderer.sprite = _yellowKey;
+                break;
+
+            case DoorsKeySystem.Colors.Blue:
+                renderer.sprite = _blueKey;
+                break;
+
+            case DoorsKeySystem.Colors.Green:
+                renderer.sprite = _greenKey;
+                break;
+
+            case DoorsKeySystem.Colors.Red:
+                renderer.sprite = _redKey;
+                break;
+
+        }
     }
 
     private void KeyGetHandler(DoorsKeySystem.Colors color)

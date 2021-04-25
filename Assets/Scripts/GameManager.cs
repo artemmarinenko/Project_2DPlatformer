@@ -13,22 +13,28 @@ public class GameManager : MonoBehaviour
     [SerializeField] Slider _timeSlider;
     [SerializeField] VideoPlayer _videoPlayer;
     [SerializeField] GameObject _deathPanel;
-    //[SerializeField] Slider _TimeSlider;
-    // Start is called before the first frame update
+    [SerializeField] Button _restartButton;
+
+    [SerializeField] Key _keyPrefab;
+    [SerializeField] DoorsKeySystem.Door _doorPrefab;
+
     void Awake()
     {
         _deathPanel.SetActive(false);
-        //_timeSlider.value = 0.5f;
+         _restartButton.onClick.AddListener(Reset);
+        
         GameEvent.onPlayerDamageDone += OnPlayeDamageDoneHandler;
         GameEvent.onRewindEvent += OnRewindHandler;
         
         GameEvent.onRecordEvent += OnRecordHandler;
+
         
     }
 
     private void Start()
     {
         SetTimeMaxRewindTimeToAllRewindable(_rewindMaxTime);
+        
 
     }
 
@@ -37,6 +43,32 @@ public class GameManager : MonoBehaviour
     {
         
     }
+
+    private void Reset()
+    {
+        _player.GetComponent<IResettable>().Reset();
+
+        var zombies = FindObjectsOfType<Zombie>();
+
+        foreach( Zombie z in zombies)
+        {
+            z.GetComponent<IResettable>().Reset();
+        }
+
+        var keys = FindObjectsOfType<Key>();
+        foreach(Key k in keys)
+        {
+            k.GetComponent<IResettableKey>().Reset(_keyPrefab);
+        }
+
+        var doors = FindObjectsOfType<DoorsKeySystem.Door>();
+        foreach(DoorsKeySystem.Door d in doors)
+        {
+            d.GetComponent<IResettableDoor>().Reset(_doorPrefab);
+        }
+    }
+
+
 
     private void OnRewindHandler()
     {
@@ -83,4 +115,6 @@ public class GameManager : MonoBehaviour
             z.GetComponent<Rewind>()._rewindMaxTime = rewindMaxTime;
         }
     }
+
+   
 }

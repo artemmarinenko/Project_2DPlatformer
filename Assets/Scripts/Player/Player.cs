@@ -4,7 +4,7 @@ using UnityEngine;
 using TimeControll;
 using System;
 
-public class Player  : MonoBehaviour,IRewindable
+public class Player  : MonoBehaviour,IRewindable,IResettable
 {
 
     
@@ -29,6 +29,9 @@ public class Player  : MonoBehaviour,IRewindable
 
     private Animator _animator;
 
+    private Vector2 _startingPoint;
+    private bool _startingFlip;
+
     
 
     private bool _isKeyInHands = false;
@@ -36,24 +39,18 @@ public class Player  : MonoBehaviour,IRewindable
      void Awake()
     {
         GameEvent.onPlayerDamageDone += PlayerOnDeathHandler;
-        
-       
-
 
         _animator = GetComponent<Animator>();
         _renderer = GetComponent<SpriteRenderer>();
         _rigidBody = GetComponent<Rigidbody2D>();
         _boxCollider = GetComponent<BoxCollider2D>();
-       // _key = GetComponent<KeyOnPlayer>();
-
-
-
 
 
     }
 
     void Start()
     {
+        SetStartPoint(GetPosition(),GetFlip());
         
     }
     private void Update()
@@ -128,12 +125,10 @@ public class Player  : MonoBehaviour,IRewindable
 
     private void PlayerOnDeathHandler()
     {
-        //isAlive = false;
-        //_animator.SetFloat("Speed", 0);
+        
         _animator.SetBool("DamageDone", true);
         _rigidBody.velocity = Vector2.up * _jumpHeight;
         
-        //_rigidBody.constraints = RigidbodyConstraints2D.FreezeAll;
         
     }
 
@@ -224,12 +219,40 @@ public class Player  : MonoBehaviour,IRewindable
         _isAlive = isAlive ;
     }
 
-    
+
 
     public void SetKeyStatus(bool keySatus)
     {
         _isKeyInHands = keySatus;
     }
 
+
+
+    #endregion
+
+    #region IRessetable implementation
+    public void Reset()
+    {
+
+        SetPosition(GetStartPoint().Item1);
+        SetFlip(GetStartPoint().Item2);
+        SetKeyStatus(false);
+        
+        GetComponentInChildren<KeyOnPlayer>()._spriteRenderer.sprite = null;
+        SetFlip(false);
+    }
+
+    
+
+    public Tuple<Vector2,bool> GetStartPoint()
+    {
+        return Tuple.Create(_startingPoint,_startingFlip);
+    }
+
+    public void SetStartPoint(Vector2 postion, bool flip)
+    {
+        _startingPoint = postion;
+        _startingFlip = flip;
+    }
     #endregion
 }

@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-interface IRessetable
-{  
-     void Reset();
-}
+
 public class SettingsController : MonoBehaviour
 {
     private bool isMusicOn = false;

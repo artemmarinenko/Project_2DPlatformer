@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,14 +15,19 @@ namespace DoorsKeySystem {
 
 
 
-    public class Door: MonoBehaviour
+    public class Door: MonoBehaviour, IResettableDoor
     {
         [SerializeField] private Colors _doorColor;
          private Animator _animator;
+
+        private Vector2 _startingPoint;
+        private DoorsKeySystem.Colors _startingColor;
+
         // Start is called before the first frame update
         void Awake()
         {
             _animator = GetComponent<Animator>();
+            SetStartState(transform.position, _doorColor);
             
         }
 
@@ -44,7 +50,26 @@ namespace DoorsKeySystem {
                 }
             }
         }
+        #region IresettableKeyDoor
+        public void Reset(Door doorPrefab)
+        {
+            Destroy(this.gameObject);
+            Door newKey = Instantiate(doorPrefab, GetStartState().Item1, Quaternion.identity);
+            
+        }
 
+        public void SetStartState(Vector2 postion, Colors color)
+        {
+            _startingPoint = postion;
+            _startingColor = color;
+        }
+
+        public Tuple<Vector2, Colors> GetStartState()
+        {
+            return Tuple.Create(_startingPoint, _startingColor);
+        }
+
+        #endregion
     }
 }
 
