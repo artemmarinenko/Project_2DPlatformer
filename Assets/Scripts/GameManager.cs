@@ -13,7 +13,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] Slider _timeSlider;
     [SerializeField] VideoPlayer _videoPlayer;
     [SerializeField] GameObject _deathPanel;
+    [SerializeField] GameObject _finishPanel;
     [SerializeField] Button _restartButton;
+    
 
     [SerializeField] Key _keyPrefab;
     [SerializeField] DoorsKeySystem.Door _doorPrefab;
@@ -21,6 +23,7 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         _deathPanel.SetActive(false);
+        _finishPanel.SetActive(false);
          _restartButton.onClick.AddListener(Reset);
         
         GameEvent.onPlayerDamageDone += OnPlayeDamageDoneHandler;
@@ -28,7 +31,10 @@ public class GameManager : MonoBehaviour
         
         GameEvent.onRecordEvent += OnRecordHandler;
 
-        
+        GameEvent.onFinish += OnFinishHandler;
+
+
+
     }
 
     private void Start()
@@ -68,7 +74,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
+    private void OnFinishHandler()
+    {
+        StartCoroutine(WaitThanFinishAndRestart());
+    }
 
     private void OnRewindHandler()
     {
@@ -102,6 +111,19 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0;
 
     }
+
+    IEnumerator WaitThanFinishAndRestart()
+    {
+
+        _finishPanel.SetActive(true);
+        yield return new WaitForSeconds(2f);
+        _finishPanel.SetActive(false);
+        Reset();
+        
+
+    }
+
+
 
     private void SetTimeMaxRewindTimeToAllRewindable(float rewindMaxTime)
     {

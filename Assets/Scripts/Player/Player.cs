@@ -39,6 +39,7 @@ public class Player  : MonoBehaviour,IRewindable,IResettable
      void Awake()
     {
         GameEvent.onPlayerDamageDone += PlayerOnDeathHandler;
+        GameEvent.onDoorOpened += DoorOpenedHandler;
 
         _animator = GetComponent<Animator>();
         _renderer = GetComponent<SpriteRenderer>();
@@ -120,8 +121,11 @@ public class Player  : MonoBehaviour,IRewindable,IResettable
         _isKeyInHands = isInHands;
     }
 
-    
-    
+    private void DoorOpenedHandler(DoorsKeySystem.Colors color)
+    {
+        _isKeyInHands = false;
+    }
+
 
     private void PlayerOnDeathHandler()
     {

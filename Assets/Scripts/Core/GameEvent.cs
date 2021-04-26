@@ -26,6 +26,14 @@ public static class GameEvent
 
     public static event isRewinding onRecordEvent;
 
+    public delegate void Finish();
+    public static event Finish onFinish;
+
+    public static void RaiseOnFinish()
+    {
+        onFinish?.Invoke();
+    }
+
     public static void RaiseOnDoorOpened(DoorsKeySystem.Colors color)
     {
         onDoorOpened?.Invoke(color);

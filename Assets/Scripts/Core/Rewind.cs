@@ -194,13 +194,13 @@ namespace TimeControll {
         public static void RewindSliderEffect(Slider slider, float timeMeasure)
         {
             if (slider.value > 0)
-                slider.value -= (0.3f / timeMeasure);
+                slider.value -= (0.1f / timeMeasure);
         }
 
         public static void RecordSliderEffect(Slider slider, float timeMeasure)
         {
             if (slider.value < 1)
-                slider.value += (0.3f / timeMeasure);
+                slider.value += (0.1f / timeMeasure);
 
         }
     }

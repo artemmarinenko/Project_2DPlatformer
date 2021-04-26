@@ -9,6 +9,7 @@ public class Zombie : MonoBehaviour, IRewindable, IResettable
     private Animator _animator;
     private Rigidbody2D _rigidBody;
     private BoxCollider2D _boxCollider;
+
     private bool IsMoving = true;
     private bool _isAlive = true;
     private bool _keyStatus = false;
@@ -16,6 +17,7 @@ public class Zombie : MonoBehaviour, IRewindable, IResettable
     private Vector2 _startingPoint;
     private bool _startingFlip;
     [SerializeField] private CollideController _collideController;
+    
 
 
 
@@ -30,6 +32,7 @@ public class Zombie : MonoBehaviour, IRewindable, IResettable
         _boxCollider = GetComponent<BoxCollider2D>();
         _animator = GetComponent<Animator>();
 
+        //SetSpeed(_speed);
         SetStartPoint(GetPosition(), GetFlip());
 
     }
