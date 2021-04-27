@@ -10,7 +10,7 @@ namespace TimeControll {
     {
         Animator GetAnimator();
 
-        BoxCollider2D GetCollider();
+        CapsuleCollider2D GetCollider();
 
         bool GetFlip();
 
@@ -101,44 +101,28 @@ namespace TimeControll {
         public float _rewindMaxTime { get; set; }
 
         private LinkedList<TimePoint> _timePoints = new LinkedList<TimePoint>();
-
         private IRewindable _irewindableObject;
-
-        
-        
-
         private  bool isRewinding = false;
      
         void Awake()
         {
-            
             _irewindableObject = GetComponent<IRewindable>();
-
         }
 
-        
+
 
         private void Update()
         {
 
-
-
-            if (Input.GetKey(KeyCode.R)&& _timePoints.Count != 0)
+            if (Input.GetKey(KeyCode.R) && _timePoints.Count != 0)
             {
                 Time.timeScale = 1f;
-                
                 isRewinding = true;
-                
-
             }
             else
             {
                 isRewinding = false;
-                
             }
-
-
-
         }
         void FixedUpdate()
         {
@@ -156,13 +140,9 @@ namespace TimeControll {
         {
 
             if (_timePoints.Count != 0) { 
-
             TimePoint.SetTimePoint(_irewindableObject, _timePoints.Last.Value);
-
             _timePoints.RemoveLast(); 
-
                 }
-
             else {
                 isRewinding = false;
                 }

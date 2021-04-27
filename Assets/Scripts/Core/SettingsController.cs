@@ -17,7 +17,7 @@ public class SettingsController : MonoBehaviour
     [SerializeField] private Slider _slider;
 
     [SerializeField] GameObject _settings;
-    // Start is called before the first frame update
+    
     void Awake()
     {
         AddButtonsListeners();

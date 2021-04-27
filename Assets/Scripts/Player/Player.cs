@@ -21,7 +21,7 @@ public class Player  : MonoBehaviour,IRewindable,IResettable
 
     private Rigidbody2D _rigidBody;
 
-    private BoxCollider2D _boxCollider;
+    private CapsuleCollider2D _boxCollider;
 
     private bool _isAlive = true;
 
@@ -44,7 +44,7 @@ public class Player  : MonoBehaviour,IRewindable,IResettable
         _animator = GetComponent<Animator>();
         _renderer = GetComponent<SpriteRenderer>();
         _rigidBody = GetComponent<Rigidbody2D>();
-        _boxCollider = GetComponent<BoxCollider2D>();
+        _boxCollider = GetComponent<CapsuleCollider2D>();
 
 
     }
@@ -158,7 +158,7 @@ public class Player  : MonoBehaviour,IRewindable,IResettable
     {
         return _animator.GetBool("DamageDone");
     }
-    public BoxCollider2D GetCollider()
+    public CapsuleCollider2D GetCollider()
     {
         return _boxCollider;
     }

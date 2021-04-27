@@ -17,7 +17,7 @@ public class CollideController : MonoBehaviour
      
     public Tuple<CollideTypes, Collider2D> ColliderUnderPlayerType(IRewindable irewindableObject,LayerMask layerMask)
     {
-        BoxCollider2D boxCollider = irewindableObject.GetCollider();
+        CapsuleCollider2D boxCollider = irewindableObject.GetCollider();
 
         RaycastHit2D boxHit = Physics2D.BoxCast(boxCollider.bounds.center, 
                                                 new Vector2(boxCollider.size.x-0.05f, boxCollider.size.y),
@@ -51,7 +51,7 @@ public class CollideController : MonoBehaviour
     public CollideTypes ColliderFaced(IRewindable irewindableObject,LayerMask layerMask)
     {
         RaycastHit2D raycastHit = new RaycastHit2D();
-        BoxCollider2D boxCollider = irewindableObject.GetCollider();
+        CapsuleCollider2D boxCollider = irewindableObject.GetCollider();
 
         if (irewindableObject.GetFlip() == false)
         {
@@ -64,7 +64,7 @@ public class CollideController : MonoBehaviour
 
         //Debug.DrawRay(_boxCollider.bounds.center,transform.TransformDirection(transform.forward)*5f,Color.red);
 
-        //Debug.Log (raycastHit.collider != null);
+        
 
 
         if (raycastHit.collider == null)

@@ -8,7 +8,7 @@ public class Zombie : MonoBehaviour, IRewindable, IResettable
 {
     private Animator _animator;
     private Rigidbody2D _rigidBody;
-    private BoxCollider2D _boxCollider;
+    private CapsuleCollider2D _boxCollider;
 
     private bool IsMoving = true;
     private bool _isAlive = true;
@@ -29,7 +29,7 @@ public class Zombie : MonoBehaviour, IRewindable, IResettable
 
         _rigidBody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-        _boxCollider = GetComponent<BoxCollider2D>();
+        _boxCollider = GetComponent<CapsuleCollider2D>();
         _animator = GetComponent<Animator>();
 
         //SetSpeed(_speed);
@@ -116,7 +116,7 @@ public class Zombie : MonoBehaviour, IRewindable, IResettable
     {
         return _animator.GetBool("DamageDone");
     }
-    public BoxCollider2D GetCollider()
+    public CapsuleCollider2D GetCollider()
     {
         return _boxCollider;
     }
